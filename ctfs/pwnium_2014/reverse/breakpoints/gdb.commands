@@ -1,0 +1,7 @@
+br *0x400660
+br *0x40063e
+br *0x406693
+br *0x406640
+br *0x400647
+
+br *0x40065D # leads to mem 0x40d2ac and segfaults

@@ -1,0 +1,13 @@
+import immiscible_dec.py on new file, so the main if block exectures
+substitute 
+		marshal.loads(bytecode) 
+	with 
+		marhsall.loads(b64decode(bytecode))
+next in file immiscible_dec.py insert after the f = new.function[....]
+	 print f.func_code.co_consts
+
+you get something like 
+
+ (-1, ('sha1',), ('getenv',), 'NO_CON_NAME', '', 'Y', ' 57 68 61 74 20 69 73 20 74 68 65 20 61 69 72 2d ', ' 73 70 65 65 64 20 76 65 6c 6f 63 69 74 79 20 6f ', ' 66 20 61 6e 20 75 6e 6c 61 64 65 6e 20 73 77 61 ', ' 6c 6c 6f 77 3f ', ' ', 'hex', 'NCN', None)
+
+add the strings of constants and replace spaces, turn that into a string and take the sha1sum of that, flag is NCN+sha1(strings)

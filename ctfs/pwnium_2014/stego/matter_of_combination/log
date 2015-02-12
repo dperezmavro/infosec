@@ -1,0 +1,9 @@
+header is 
+89 50 4e 47 0d 0a 1a 0a
+.  P  N  G  CR LF DL LF --> DL = DOS type end of file
+
+chunk 1 : IHDR
+chunk 2 : bKGD -> bg color 
+chunk 3 : pHYs
+chunk 4 : tIME
+chunk 5 : IDAT -> image contained here, length 0x20

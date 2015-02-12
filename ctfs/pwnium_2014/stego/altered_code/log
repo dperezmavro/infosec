@@ -1,0 +1,4 @@
+open main.c in vim
+use :set list
+comment out each line with ^I
+compile and run

@@ -1,0 +1,45 @@
+look at disassembly of main
+	mov ebx, offset __data_start__  < examine this
+it's a string, but each char is a 4-byte integer :
+.data:00402000 __data_start__
+67h ; g
+0
+0
+0
+79h ; y
+0
+0
+0
+4Dh ; M
+0
+0
+0
+68h ; h
+0
+0
+0
+59h ; Y
+0
+0
+0
+53h ; S
+0
+0
+0
+50h ; P
+0
+0
+0
+62h ; b
+0
+0
+0
+
+rep movsd is a sign that we are moving doubles; 8 doubles I think.
+
+esp+5Ch+var_14 is the index in the supplied string!
+esp+5Ch+var_34 is the local variable address of the password
+esp+5Ch+var_3E is the address of where user input is stored
+
+so each char of the password is XORed with 1 and then the result is compared with user input, if they match you go on !
+

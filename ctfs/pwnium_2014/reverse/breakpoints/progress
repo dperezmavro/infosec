@@ -1,0 +1,47 @@
+whatch out for ptrace antidebug
+flag : D3bugG1nG_
+0FE129837h leads us to 'D' -> key changes to 0D2283D5Ch
+0D2283D5Ch leads us to '3' -> key changes to 0921224E0h
+0921224E0h leads us to 'b' -> key changes to 059C9F953h
+059C9F953h leads us to 'u' -> key changes to 04CAE036Ch
+04CAE036Ch leads us to 'g' -> key changes to 07151AC2Dh
+07151AC2Dh leads us to 'G' -> key changes to 0F00D2D49h
+0F00D2D49h leads us to '1' -> key changes to 02EA896FFh
+02EA896FFh leads us to 'n' -> key changes to 0CC194CC7h
+0CC194CC7h leads us to 'G' -> key changes to 0182D7714h
+0182D7714h leads us to '_' -> key changes to 03B1232B4h
+03B1232B4h leads us to 'T' -> key changes to 0A72D6C18h
+0A72D6C18h leads us to 'h' -> key changes to 071B7106Ah
+071B7106Ah leads us to '1' -> key changes to 0827A53B1h
+0827A53B1h leads us to 's' -> key changes to 03C8A90FFh
+03C8A90FFh leads us to '_' -> key changes to 047279FAEh
+047279FAEh leads us to 'O' -> key changes to 032894CA2h
+032894CA2h leads us to 'b' -> key changes to 09C19EE76h
+09C19EE76h leads us to 'f' -> key changes to 02FCA1163h
+02FCA1163h leads us to 'u' -> key changes to 04B5A7528h
+04B5A7528h leads us to 'S' -> key changes to 0EF1580B9h
+0EF1580B9h leads us to 'c' -> key changes to 00557744Dh
+00557744Dh leads us to '4' -> key changes to 02FBB4492h
+02FBB4492h leads us to 't' -> key changes to 0774F07A0h
+0774F07A0h leads us to '3' -> key changes to 015142793h
+015142793h leads us to 'd' -> key changes to 07FCBE8E1h
+07FCBE8E1h leads us to '_' -> key changes to 04FDC74FEh
+04FDC74FEh leads us to 'C' -> key changes to 0C0DF40A6h
+0C0DF40A6h leads us to '0' -> key changes to 081F92B5Fh
+081F92B5Fh leads us to 'd' -> key changes to 0DD01EAB3h
+0DD01EAB3h leads us to '3' -> key changes to 0AD72E300h
+0AD72E300h leads us to '_' -> key changes to 0A025ED69h
+0A025ED69h leads us to '1' -> key changes to 05D65105Eh
+05D65105Eh leads us to 's' -> key changes to 04918D4CEh
+04918D4CEh leads us to '_' -> key changes to 0792F371Fh
+0792F371Fh leads us to 'R' -> key changes to 0E49E1D4Ch
+0E49E1D4Ch leads us to '3' -> key changes to 08190D2E1h
+08190D2E1h leads us to '4' -> key changes to 05B3EF3EFh
+05B3EF3EFh leads us to 'l' -> key changes to 0008EDF89h
+0008EDF89h leads us to 'l' -> key changes to 0417AB283h
+0417AB283h leads us to 'y' -> key changes to 0894CFF3Fh
+0894CFF3Fh leads us to '_' -> key changes to 06FCDB657h
+06FCDB657h leads us to 'H' -> key changes to 062A0C8CAh
+062A0C8CAh leads us to '4' -> key changes to 0607300DCh
+0607300DCh leads us to 'r' -> key changes to 0E81C0D24h
+0E81C0D24h leads us to 'D' -> return 1

@@ -1,0 +1,7 @@
+to get the information , submit the file to anubis for analysis.
+it is possibly live malware, haven't tested that it is not active
+
+ip : 193.95.68.245
+port : 81 {taken from pcap trace}
+
+

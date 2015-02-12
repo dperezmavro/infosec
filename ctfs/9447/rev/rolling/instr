@@ -1,0 +1,158 @@
+=> 0x7ffff7ff7000:   push   rbp
+   0x7ffff7ff7001:   mov    rbp,rsp
+   0x7ffff7ff7004:   mov    QWORD PTR [rbp-0x8],rdi
+   0x7ffff7ff7008:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff700c:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff700f:   cmp    al,0x39
+   0x7ffff7ff7011:   jne    0x7ffff7ff7217
+   0x7ffff7ff7017:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff701b:   add    rax,0x1
+   0x7ffff7ff701f:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff7022:   cmp    al,0x34
+   0x7ffff7ff7024:   jne    0x7ffff7ff7217
+   0x7ffff7ff702a:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff702e:   add    rax,0x2
+   0x7ffff7ff7032:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff7035:   cmp    al,0x34
+   0x7ffff7ff7037:   jne    0x7ffff7ff7217
+   0x7ffff7ff703d:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7041:   add    rax,0x3
+   0x7ffff7ff7045:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff7048:   cmp    al,0x37
+   0x7ffff7ff704a:   jne    0x7ffff7ff7217
+   0x7ffff7ff7050:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7054:   add    rax,0x4
+   0x7ffff7ff7058:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff705b:   movsx  edx,al
+   0x7ffff7ff705e:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7062:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff7065:   movsx  eax,al
+   0x7ffff7ff7068:   add    eax,0x39
+   0x7ffff7ff706b:   cmp    edx,eax
+   0x7ffff7ff706d:   jne    0x7ffff7ff7217
+   0x7ffff7ff7073:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7077:   add    rax,0x5
+   0x7ffff7ff707b:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff707e:   movsx  eax,al
+   0x7ffff7ff7081:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7085:   add    rdx,0x1
+   0x7ffff7ff7089:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff708c:   msovsx  edx,dl
+   0x7ffff7ff708f:   add    edx,0x3b
+   0x7ffff7ff7092:   cmp    eax,edx
+   0x7ffff7ff7094:   jne    0x7ffff7ff7217
+   0x7ffff7ff709a:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff709e:   add    rax,0x6
+   0x7ffff7ff70a2:  movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff70a5:   movsx  eax,al
+   0x7ffff7ff70a8:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff70ac:   add    rdx,0x2
+   0x7ffff7ff70b0:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff70b3:   movsx  edx,dl
+   0x7ffff7ff70b6:   add    edx,0x38
+   0x7ffff7ff70b9:   cmp    eax,edx
+   0x7ffff7ff70bb:   jne    0x7ffff7ff7217
+   0x7ffff7ff70c1:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff70c5:   add    rax,0x7
+   0x7ffff7ff70c9:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff70cc:   movsx  eax,al
+   0x7ffff7ff70cf:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff70d3:   add    rdx,0x3
+   0x7ffff7ff70d7:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff70da:   movsx  edx,dl
+   0x7ffff7ff70dd:   add    edx,0x35
+   0x7ffff7ff70e0:   cmp    eax,edx
+   0x7ffff7ff70e2:   jne    0x7ffff7ff7217
+   0x7ffff7ff70e8:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff70ec:   add    rax,0x8
+   0x7ffff7ff70f0:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff70f3:   movsx  eax,al
+   0x7ffff7ff70f6:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff70fa:   add    rdx,0x4
+   0x7ffff7ff70fe:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff7101:   movsx  edx,dl
+   0x7ffff7ff7104:   sub    edx,0x9
+   0x7ffff7ff7107:   cmp    eax,edx
+   0x7ffff7ff7109:   jne    0x7ffff7ff7217
+   0x7ffff7ff710f:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7113:   add    rax,0x9
+   0x7ffff7ff7117:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff711a:   movsx  eax,al
+   0x7ffff7ff711d:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7121:   add    rdx,0x5
+   0x7ffff7ff7125:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff7128:   movsx  edx,dl
+   0x7ffff7ff712b:   sub    edx,0x1
+   0x7ffff7ff712e:   cmp    eax,edx
+   0x7ffff7ff7130:   jne    0x7ffff7ff7217
+   0x7ffff7ff7136:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff713a:   add    rax,0xa
+   0x7ffff7ff713e:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff7141:   movsx  eax,al
+   0x7ffff7ff7144:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7148:   add    rdx,0x6
+   0x7ffff7ff714c:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff714f:   movsx  edx,dl
+   0x7ffff7ff7152:   sub    edx,0x5
+   0x7ffff7ff7155:   cmp    eax,edx
+   0x7ffff7ff7157:   jne    0x7ffff7ff7217
+   0x7ffff7ff715d:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7161:   add    rax,0xb
+    0x7ffff7ff7165:  movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff7168:   movsx  eax,al
+   0x7ffff7ff716b:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff716f:   add    rdx,0x7
+   0x7ffff7ff7173:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff7176:   movsx  edx,dl
+   0x7ffff7ff7179:   sub    edx,0x3
+   0x7ffff7ff717c:   cmp    eax,edx
+   0x7ffff7ff717e:   jne    0x7ffff7ff7217
+   0x7ffff7ff7184:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7188:   add    rax,0xc
+   0x7ffff7ff718c:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff718f:   movsx  eax,al
+   0x7ffff7ff7192:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff7196:   add    rdx,0x8
+   0x7ffff7ff719a:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff719d:   movsx  edx,dl
+   0x7ffff7ff71a0:   add    edx,0xa
+   0x7ffff7ff71a3:   cmp    eax,edx
+   0x7ffff7ff71a5:   jne    0x7ffff7ff7217
+   0x7ffff7ff71a7:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff71ab:   add    rax,0xd
+   0x7ffff7ff71af:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff71b2:   movsx  eax,al
+   0x7ffff7ff71b5:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff71b9:   add    rdx,0x9
+   0x7ffff7ff71bd:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff71c0:   movsx  edx,dl
+   0x7ffff7ff71c3:   sub    edx,0x8
+   0x7ffff7ff71c6:   cmp    eax,edx
+   0x7ffff7ff71c8:   jne    0x7ffff7ff7217
+   0x7ffff7ff71ca:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff71ce:   add    rax,0xe
+   0x7ffff7ff71d2:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff71d5:   movsx  eax,al
+0x7ffff7ff71d8:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff71dc:   add    rdx,0xa
+   0x7ffff7ff71e0:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff71e3:   movsx  edx,dl
+   0x7ffff7ff71e6:   add    edx,0xe
+   0x7ffff7ff71e9:   cmp    eax,edx
+   0x7ffff7ff71eb:   jne    0x7ffff7ff7217
+   0x7ffff7ff71ed:   mov    rax,QWORD PTR [rbp-0x8]
+   0x7ffff7ff71f1:   add    rax,0xf
+   0x7ffff7ff71f5:   movzx  eax,BYTE PTR [rax]
+   0x7ffff7ff71f8:   movsx  eax,al
+   0x7ffff7ff71fb:   mov    rdx,QWORD PTR [rbp-0x8]
+   0x7ffff7ff71ff:   add    rdx,0xb
+   0x7ffff7ff7203:   movzx  edx,BYTE PTR [rdx]
+   0x7ffff7ff7206:   movsx  edx,dl
+  0x7ffff7ff7209: add    edx,0x5
+   0x7ffff7ff720c:   cmp    eax,edx
+   0x7ffff7ff720e:   jne    0x7ffff7ff7217
+   0x7ffff7ff7210:   mov    eax,0x1                   ; auto edw 8elw na ginei
+   0x7ffff7ff7215:   jmp    0x7ffff7ff721c
+   0x7ffff7ff7217:   mov    eax,0x0                   ; den 8elw auto.
+   0x7ffff7ff721c:   pop    rbp
+   0x7ffff7ff721d:   ret 
