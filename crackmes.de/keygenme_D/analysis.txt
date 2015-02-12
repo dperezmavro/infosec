@@ -1,0 +1,32 @@
+generation of the serial based on the username is performed at *0x4023b8
+check for matching serials is performed at *0x40249f
+interesting block preceding the two is at *0x4023a3
+
+* [ebp+var_8] must be some form of counter loop variable 
+* resulting generated key is always 9 digits long,
+	* 10 if it has a - sign 
+	* 8 if it is a numeric input
+
+while ( counter_var <= strlen(name){
+	<derive key here >
+}
+
+foreach byte of name :
+	v1 = byte / 5 ;
+	v2 = byte % 5 ;
+	ecx = v1 ;
+	sar ecx, 1Fh
+	eax = 23e ; mov from mem
+	edx = 0	  ; mov from mem 
+	ecx *= eax
+	edx *= ebx
+	ecx += edx
+	eax *= ebx
+	edx += ecx
+	[ebp-10h] = eax
+	edi = byte
+	edx = edi
+	sar edx , 1fh
+	[kebp - 10h] += edi
+
+00000:34248414
