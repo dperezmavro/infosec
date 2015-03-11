@@ -1,0 +1,18 @@
+function sub_80483B0 has a dead jump in it, I think it just masks a retn
+
+function sub_8048420 also seems a bit weird, what is memory location 0x804b164?
+    * looks like it does no actual work
+
+0x8048eeee : esi is always 1 here  
+    the loop further down is always performed once 
+
+at 0x08048380 esi holds number of command line arguments
+at 0x08048f15 ebp holds number of command line arguments 
+
+in big_switch_stmt function the [ebp+var_1] looks like a control variable 
+    * it's where the return value is stored 
+
+In the main function, the variables in the stack are probably being used to calculate the next jump location. We're moving a variable in the ecx register, which is being pushed to the stack. In the big switch statement function a value from the stack is being used to calculate where we must jump (ja loc_xxx), and from in there that value is also being used to load the index for the letters to be xored) 
+
+Think I found it! in the bigswitch statement, the values were being xored with the nexto position!
+    so far : flag{switch jump pogo pogo bounce}
