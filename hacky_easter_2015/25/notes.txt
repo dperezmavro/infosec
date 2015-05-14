@@ -1,0 +1,9 @@
+Need IDA + Bytecode viewer
+
+Exported functions of interest : Fizzle, Shizzle
+
+In java : 
+    bizzle : filters out any non a-zA-Z chars, converts Z->A , z->a
+    rizzle : switches character case around 
+
+

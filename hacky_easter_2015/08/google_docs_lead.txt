@@ -1,0 +1,7 @@
+id is : 1QPkfrnSVRAhQKL7AZx_HVXWrRXDvwCnVX2ih0jYp1CA
+
+base url for spreadsheets : https://docs.google.com/spreadsheets/d/
+
+https://docs.google.com/spreadsheets/d/1QPkfrnSVRAhQKL7AZx_HVXWrRXDvwCnVX2ih0jYp1CA
+
+downloaded it : numbers on the side of square are probably locations on the proper QR code

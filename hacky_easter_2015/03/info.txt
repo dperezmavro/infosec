@@ -1,0 +1,1 @@
+ LXF files are in fact ZIP archives containing a PNG thumbnail and the LXFML file: The LXFML file is sort of an XML file containing the actual model. If you are interested in the XML schema, have a look at this thread. 

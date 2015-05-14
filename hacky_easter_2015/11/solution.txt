@@ -1,0 +1,6 @@
+unzip file
+go through files
+spot huge b64enc data
+decode into file
+binwalk -e the file
+win monies
