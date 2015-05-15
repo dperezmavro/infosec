@@ -4,3 +4,48 @@ spot huge b64enc data
 decode into file
 binwalk -e the file
 win monies
+
+
+discovered this in mail contents : 
+   
+   Hi Hacky,
+here's the p4ssw0rd, as discussed:
+is=C3=A4rdragare
+Please keep it s3kr3t!
+Regards,
+Dr. Bunny C. Easter
+--001a113a961850ddac05043917f7
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+<div dir=3D"ltr"><div><div><div><div>Hi Hacky, <br><br></div>here&#39;s the=
+p4ssw0rd, as discussed:<br><br></div><span id=3D"result_box" class=3D"" la=
+ng=3D"sv"><span class=3D"">is=C3=A4rdragare<br><br></span></span></div><div=
+><span id=3D"result_box" class=3D"" lang=3D"sv"><span class=3D"">Please kee=
+p it s3kr3t!<br></span></span></div><div><span id=3D"result_box" class=3D""=
+lang=3D"sv"><span class=3D""><br></span></span></div><span id=3D"result_bo=
+x" class=3D"" lang=3D"sv"><span class=3D"">Regards, <br></span></span></div=
+><span id=3D"result_box" class=3D"" lang=3D"sv"><span class=3D"">=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+Dr. Bunny C. Easter<br></span></span></div>
+
+
+Hello,
+
+You just sent us a cracking task, thank you. We will work on it shortly.
+
+Meanwhile you can : 
+- Follow the cracking progress using this unique URL : http://www.OnlineHashCrack.com/?2ac25097e3 ;
+- Cancel / delete this task if no longer needed ;
+- Read our FAQs : http://www.OnlineHashCrack.com/aboutcontact.php
+
+If we can recover your password we will notify you using this email.
+
+For any question please use hash@onlinehashcrack.com and be sure to mention the personal URL.
+
+Best regards.
+
+http://www.OnlineHashCrack.com
+
+hashes in that url include : 
+61EE8B5601A84D5154387578466C8998848BA089 : "test123\n"
+735443135489D0DE46ED948DA4E03F080D0D9328

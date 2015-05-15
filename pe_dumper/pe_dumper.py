@@ -68,14 +68,19 @@ def read_dll(filename):
 
     inspect_sections(file_contents)
 
-def enumerate_exports():
-    pass
+def enumerate_exports(filename):
+    pe = pefile.PE(filename)
+    report.append("\n\n**** Enumerating exports: ****")
+    for exp in pe.DIRECTORY_ENTRY_EXPORT.symbols:
+          report.append("{:x} {:s} {:d}".format(hex(pe.OPTIONAL_HEADER.ImageBase + exp.address), exp.name, exp.ordinal))
 
 if __name__ == "__main__" :
     if len(sys.argv) == 2 :
         file_name = sys.argv[1]
         print "{0}\nInspecting file  {1}\n{0}\n".format("="*40,file_name)
         read_dll(file_name)
+        #enumerate_exports(file_name)
+
 
         for l in report : 
             print l

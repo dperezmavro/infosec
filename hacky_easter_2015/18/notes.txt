@@ -1,0 +1,8 @@
+js libraries are probably sha1 hashing libs
+
+auth contains what I believe are authentication creds for the website 
+    user=supershark&pass=hashed%21%21%21&hash=b3f3ca462d3fa58b74d6982af14d8841b074994a
+    creds : supershark:b3f3ca462d3fa58b74d6982af14d8841b074994a
+            supershark:predatorsofthes3a
+
+basic auth creds : sharkman:sharks_have_j4ws
