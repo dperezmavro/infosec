@@ -1,6 +1,9 @@
 Need IDA + Bytecode viewer
 
 Exported functions of interest : Fizzle, Shizzle
+    Shizzle : I think that this reverses the string 
+
+String must be 16 characters long 
 
 In java : 
     bizzle : filters out any non a-zA-Z chars, converts Z->A , z->a
