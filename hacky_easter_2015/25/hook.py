@@ -102,8 +102,10 @@ import ctypes
 def decode(ct):
 	res = ""
 	for i,l in enumerate(ct):
-		res += mega_map[i][l]
-	print "Original value of {:s} is {:s}".format(ct,res)
+		print "Matching {:s} {:s}".format(l, oracle[i][l])
+		print oracle[i]
+		res += oracle[i][l]
+	return res
 
 
 #attemps to build an index of terms for each character in each position
@@ -119,7 +121,7 @@ def build_map():
 
 
 #try to build a reverse dictionary 
-mega_map = [{chr(i):"0" for i in xrange(32,127) } for j in xrange(0,1)]
+mega_map = [{chr(i):"0" for i in xrange(32,127) } for j in xrange(0,16)]
 
 def build_str(index, char):
     return index*" " + char + " "*(15-index)
@@ -132,7 +134,10 @@ for index,dictionary_copy in enumerate(mega_map):
         string = build_str(index,char)
         resp = fizzle(string)
         print "fizzle({:s}) = {:s}".format(string, resp)
-        target_letter = resp[(index+8) % 16] #fix index
+        target_letter = resp[(index+8) % 16] # verify this is correct
         print target_letter
         dictionary[target_letter] = char
     oracle.append(dictionary)
+
+secret = "a"*16
+print "secret is : {:s}. fizzle = {:s} , decode = {:s}".format(secret, fizzle(secret), decode(fizzle(secret)))

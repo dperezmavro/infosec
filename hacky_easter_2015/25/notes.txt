@@ -5,8 +5,12 @@ Exported functions of interest : Fizzle, Shizzle
 
 String must be 16 characters long 
 
+fizzle is a transposition function
+    results are serially processed, offset in PT is offset in CT
+    start of CT is index 8 of PT, then continues linearly
+
 In java : 
-    bizzle : filters out any non a-zA-Z chars, converts Z->A , z->a
+    bizzle : shifts alphabetical characters by +1, Z->A , z->a
     rizzle : switches character case around 
 
 
