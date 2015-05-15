@@ -6,44 +6,69 @@ import ctypes
 
 lib = ctypes.cdll.LoadLibrary("libhe2015_Lizzle.dll")
 
+#private static String bizzle(String s) {
+#char[] chars = s.toCharArray();
+#
+#for(int i = 0; i < chars.length; ++i) {
+#char c = chars[i];
+#if(c >= 97 && c < 122) {
+#++c;
+#} else if(c == 122) {
+#c = 97;
+#} else if(c >= 65 && c < 90) {
+#++c;
+#} else if(c == 90) {
+#c = 65;
+#}
+#
+#chars[i] = c;
+#}
+#
+#return new String(chars);
+#}
+
+def bizzle(string):
+	#TODO
+	return 0
+
 def rizzle(string):	
-    res = ""
-    for i in string:
-        if i.isupper():
-            res += i.lower()
-        elif i.islower():
-            res += i.upper()
-        else :
-            print "Unknown case for ", str(i)
-            sys.exit(-1)
-    return res
+	res = ""
+	for i in string:
+		if i.isupper():
+			res += i.lower()
+		elif i.islower():
+			res += i.upper()
+		else :
+			print "Unknown case for ", str(i)
+			sys.exit(-1)
+	return res
 
 def shizzle(arg1):
-    global lib
-    shizzle_func = lib.Shizzle
-    res = ctypes.create_string_buffer(16) #must be writeable
-    shizzle_func(arg1,res) #return value is what whas in eax, in this case first char of string so don't use that
-    return res.value
+	global lib
+	shizzle_func = lib.Shizzle
+	res = ctypes.create_string_buffer(16) #must be writeable
+	shizzle_func(arg1,res) #return value is what whas in eax, in this case first char of string so don't use that
+	return res.value
 
 def fizzle(arg1):
-    global lib
-    fizzle_func = lib.Fizzle
-    res = ctypes.create_string_buffer(16) #must be writeable
-    fizzle_func(arg1,res) #return value is what whas in eax, in this case first char of string so don't use that
-    return res.value
+	global lib
+	fizzle_func = lib.Fizzle
+	res = ctypes.create_string_buffer(16) #must be writeable
+	fizzle_func(arg1,res) #return value is what whas in eax, in this case first char of string so don't use that
+	return res.value
 
 def run():
 	# Exports Fizzle, Shizzle
-    lib = ctypes.cdll.LoadLibrary("libhe2015_Lizzle.dll")
-    arg1 = ctypes.c_char_p("1234567890123456")
-    res = shizzle(arg1)
-    print "Result : shizzle({:s}) = {:s}".format(arg1,res)
-    
+	lib = ctypes.cdll.LoadLibrary("libhe2015_Lizzle.dll")
+	arg1 = ctypes.c_char_p("1234567890123456")
+	res = shizzle(arg1)
+	print "Result : shizzle({:s}) = {:s}".format(arg1,res)
+	
 run()   
 
 
 
-print rizzle("TeSt") # tEsT    
+print rizzle("TeSt") # tEsT	
 
 
 #
@@ -78,24 +103,5 @@ print rizzle("TeSt") # tEsT
 #return new String(chars);
 #}
 #
-#private static String bizzle(String s) {
-#char[] chars = s.toCharArray();
-#
-#for(int i = 0; i < chars.length; ++i) {
-#char c = chars[i];
-#if(c >= 97 && c < 122) {
-#++c;
-#} else if(c == 122) {
-#c = 97;
-#} else if(c >= 65 && c < 90) {
-#++c;
-#} else if(c == 90) {
-#c = 65;
-#}
-#
-#chars[i] = c;
-#}
-#
-#return new String(chars);
-#}
+
 #
