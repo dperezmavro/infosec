@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# copy from windows
 
-import sys
 import ctypes
 
 lib = ctypes.cdll.LoadLibrary("libhe2015_Lizzle.dll")
@@ -35,7 +33,6 @@ def rizzle(string):
 			res += i
 	return res
 
-#this is just string reversing
 def shizzle(arg1):
 	global lib
 	shizzle_func = lib.Shizzle
@@ -49,7 +46,6 @@ def fizzle(arg1):
 	res = ctypes.create_string_buffer(16) #must be writeable
 	fizzle_func(arg1,res) #return value is what whas in eax, in this case first char of string so don't use that
 	return res.value
-
 
 def unrizzle(string):
 	return rizzle(string)
@@ -99,12 +95,10 @@ def encrypt(string):
 	return h2
 
 def decrypt(string):
-	h = string #"v3O] pmWm<Y(0=21"
+	h = string
 	for i in xrange(0,10):
-		#h = fizzle(rizzle(shizzle(bizzle(h))))
 		h = unfizzle(unrizzle(unshizzle(unbizzle(string))))
 	return h
-
 
 def run():
 	password = "abc1234==168.-!A" #input('Provide decryption password')
