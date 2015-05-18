@@ -91,34 +91,27 @@ def build_oracle():
 
 def encrypt(string):
     h2 = string
-    for i in xrange(0,1):
-    	h2 = bizzle(h2)
-    	h2 = shizzle(h2)
-    	h2 = rizzle(h2)
-    	h2 = fizzle(h2)
-        #h2 = fizzle(rizzle(shizzle(bizzle(h2))))
-        #print h2
+    for i in xrange(0,10):
+        h2 = bizzle(h2)
+        h2 = shizzle(h2)
+        h2 = unrizzle(h2)
+        h2 = fizzle(h2)
     return h2
 
 def decrypt(string):
     h = string
-    for i in xrange(0,1):
+    for i in xrange(0,10):
         h = unfizzle(h)
         h = unrizzle(h)
         h = unshizzle(h)
         h = unbizzle(h)
-        #h = unfizzle(unrizzle(unshizzle(unbizzle(h))))
-        #print h
     return h
 
 def run():
     password = "abc1234==168.-!A" #input('Provide decryption password')
     build_oracle()
-
     e_a = encrypt(password)
     p_t = decrypt(e_a)
     print "secret = encrypted {:s} decrypted {:s}. decryption {:s}".format(e_a,p_t, "matches" if password == p_t else "doesn't match")
-
     print decrypt("v3O] pmWm<Y(0=21")
-    
-run()
+run()   

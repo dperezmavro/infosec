@@ -1,0 +1,49 @@
+Result : shizzle(c_char_p('aaaaaaaaaaaaaaaa')) = K\o)@Yt6fgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('aaaaaaaaaaaaaaab')) = K\o)@Yt7fgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('aaaaaaaaaaaaaaaa')) = K\o)@Yt6fgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('baaaaaaaaaaaaaaa')) = K\o)@Yt6ggjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('caaaaaaaaaaaaaaa')) = K\o)@Yt6hgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('caaaaaaaaaaaaaab')) = K\o)@Yt7hgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('caaaaaaaaaaaaaaa')) = K\o)@Yt6hgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbaaaaaaaaaaaaaa')) = K\o)@Yt6hhjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbaaaaaaaaaaaaa')) = K\o)@Yt6hhkov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbbaaaaaaaaaaaa')) = K\o)@Yt6hhkpv$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbbbaaaaaaaaaaa')) = K\o)@Yt6hhkpw$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbbbbaaaaaaaaaa')) = K\o)@Yt6hhkpw%/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbbbbbaaaaaaaaa')) = K\o)@Yt6hhkpw%0<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbbbbbbaaaaaaaa')) = K\o)@Yt6hhkpw%0=
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('cbbbbbbbbaaaaaaa')) = L\o)@Yt6hhkpw%0=
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('aaaaaaaabaaaaaaa')) = L\o)@Yt6fgjov$/<
+>>> ================================ RESTART ================================
+>>> 
+Result : shizzle(c_char_p('aaaaaaaacaaaaaaa')) = M\o)@Yt6fgjov$/<
