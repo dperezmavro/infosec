@@ -1,0 +1,95 @@
+ You intercepted messages exchanged by evil Dr. Hopper and his agents. They used a One Time Pad for achieving perfect secrecy. Lucky for you, they have miserably failed, since the same key was used multiple times.
+
+ Check out the ciphertexts, and try to decrypt them. Hint: The plain texts consist of lowercase letters and spaces only.
+
+ 60c46964f83879618e2878de539f6f4a6271d716
+ 63c37a6ca177792092602cc553c9684b
+ 68d82c6bf4767f79dd617f9642d768057f63c1
+ 6c8a7b6ce06a3161dd6a60d755d42d4d6d67
+ 71c26929e96931698e2865d816d3624b687cd6
+ 6cda6d6df87764709c6c7bd357d361556d77 
+
+==================================================
+
+Dr. Grace Murray Hopper, COBOL, seven years old
+might be crib-dragging?
+
+"the "
+    ipad
+    i we
+    allp
+
+the bo
+    " seven"
+    "s the "
+    "lack h"
+    "in lon"
+    "weallp"
+    "five*q"
+    "uslaok"
+    " lonup"
+    "i wekl"
+    "ipadsq"
+
+in lon
+    "lack h"
+    "s the "
+
+" the "
+    h sev
+    black
+    " in l"
+    " tuce"
+    dweal
+
+h seven
+    " the bo"
+    "black h"
+    " in lon"
+    "dweallp"
+
+" in lon"
+    "is the "
+    "black h"
+
+" is the "
+    "s the bo"
+    "hi black"
+    "has in l"
+    "oh seven"
+
+"has in lon"
+    "is the bo"
+    "hi black h"
+
+is in lon
+    "as the bo"
+    " oh seven"
+    "y is the "
+    "a black h"
+
+" is in lon"
+    "has the bo"
+    "h oh seven"
+    "ny is the "
+    " a black h"
+
+" is in lond"
+    "ny is the s"
+    " a black ha"
+
+hi black hat
+    " is the bonb"
+    "has in londo"
+
+" is the bonbo"
+    "has in london"    
+
+" a black hat"
+    has the bonb
+    ny is the sp
+     is in londo
+
+ny is the sp
+    is in london
+    has the bonb
