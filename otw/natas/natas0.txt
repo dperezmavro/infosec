@@ -1,0 +1,6 @@
+Username : natas5
+Password : iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq 
+URL      : http://natas5.natas.labs.overthewire.org
+
+look in the page's source, find:
+    <!--The password for natas1 is gtVrDuiDfck831PqWsLEZy5gyDz1clto -->

@@ -1,0 +1,14 @@
+Username : natas3
+Password : sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14
+URL      : http://natas3.natas.labs.overthewire.org/
+
+Look in the source, find comment : <!-- No more information leaks!! Not even Google will find it this time... -->
+
+probably a reference to a googlebot. visit /robots.txt
+
+User-agent: *
+Disallow: /s3cr3t/
+
+visit /s3cr3t/ and see dir listing, visit users.txt
+
+natas4:Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ

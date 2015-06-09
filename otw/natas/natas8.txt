@@ -1,0 +1,20 @@
+Username : natas8
+Password : DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe
+URL      : http://natas8.natas.labs.overthewire.org/
+
+View source, read code :
+
+$encodedSecret = "3d3d516343746d4d6d6c315669563362";
+
+function encodeSecret($secret) {
+    return bin2hex(strrev(base64_encode($secret)));
+}
+
+encoding is b2h -> rev -> b64e
+decoding is b2h -> rev -> b64d
+
+$ echo -n '0x3d3d516343746d4d6d6c315669563362' | xxd -r | rev | base64 -d
+$ ubWYf2kBq
+
+
+Access granted. The password for natas9 is W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl 

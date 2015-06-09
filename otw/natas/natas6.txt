@@ -1,0 +1,11 @@
+Username : natas6
+Password : aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1
+URL      : http://natas6.natas.labs.overthewire.org/
+
+Look in the source, realize that this is processing the pst request itself. View source, follow link, observe that /includes/secret.inc is included. By default only PHP renders, so request that :
+
+<?
+$secret = "FOEIUWGHFEEUHOFUOIU";
+?>
+
+Access granted. The password for natas7 is 7z3hEENjQtflzgnT29q7wAvMNfZdh0i9 

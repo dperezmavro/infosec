@@ -1,0 +1,8 @@
+Username : natas7
+Password : 7z3hEENjQtflzgnT29q7wAvMNfZdh0i9
+URL      : http://natas7.natas.labs.overthewire.org/
+
+Look in the source, identify links that look like they are included. Force browse to those pages to see if the are there and if the php is appending an extension, but no extension is appended. substitute for /etc/natas_webpass/natas8
+
+DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe 
+

@@ -1,0 +1,18 @@
+Username : natas2
+Password : ZluruAthQk7Q2MqmDeTiUij2ZvWy2mBi
+URL      : http://natas2.natas.labs.overthewire.org/
+
+Look in the source, find /files/ dir (a 1x1 pixel file is included)
+Visit dir, see dir listing, find users.txt file 
+
+http://natas2.natas.labs.overthewire.org/files/users.txt
+# username:password
+alice:BYNdCesZqW
+bob:jw2ueICLvT
+charlie:G5vCxkVV3m
+natas3:sJIJNW6ucpu6HPZ1ZAchaDtwd7oGrD14
+eve:zo4mJWyNj2
+mallory:9urtcpzBmH
+
+
+

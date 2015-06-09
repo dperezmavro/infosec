@@ -1,0 +1,13 @@
+Username: natas4
+Password: Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ
+URL:      http://natas4.natas.labs.overthewire.org
+
+
+Page says:
+" Access disallowed. You are visiting from "" while authorized users should come only from "http://natas5.natas.labs.overthewire.org/" "
+
+Empty field and from = referer, as I just browsed to it. 
+
+Change referer header to what they want and boom : 
+
+Access granted. The password for natas5 is iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq

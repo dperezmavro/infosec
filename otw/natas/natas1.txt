@@ -1,0 +1,7 @@
+Username : natas1
+Password : gtVrDuiDfck831PqWsLEZy5gyDz1clto
+URL      : natas1.natas.labs.overthewire.org
+
+do the same thing , pass is : ZluruAthQk7Q2MqmDeTiUij2ZvWy2mBi
+
+could disable JS    
