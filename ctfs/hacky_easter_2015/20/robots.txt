@@ -1,0 +1,8 @@
+User-agent: EasterBot
+Disallow: /
+Allow: /hackyeaster/bots/bots.
+
+User-agent: *
+Disallow: /
+
+

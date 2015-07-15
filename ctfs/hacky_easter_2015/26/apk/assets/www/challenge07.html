@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hacky Easter 2015</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Hacky Easter 2015 is a free white-hat hacking competition" />
+    <meta name="keywords" content="Hacking Competition White-Hat Hacking-Lab Compass Free Fun CEH" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.dropotron.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/scripts.js"></script>
+    <script type="text/javascript" src="js/crypto-js/aes.js"></script>
+    <script type="text/javascript" src="js/crypto-js/core-min.js"></script>
+    <script type="text/javascript" src="js/crypto-js/enc-base64-min.js"></script>
+    <script>
+      setChallId(7);
+      function onUserDataInjected() {}
+    </script>
+  </head>
+  <body class="no-sidebar">
+    <div id="header-wrapper"></div>
+    <script>addHeader('challenges');</script>
+    <div id="main-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="8u">
+              <article class="box post">
+                <header id="challenge-header"></header>
+                <script>addChallengeHeader()</script>
+                <p>
+                  This egg is hidden in a street-view like viewer. Peek around the area and find it!
+                </p>
+                <p>
+                  <button type="button" class="downloadButton" onclick="window.location.href='ps://panorama';">Open Viewer</button>
+                </p>
+              </article>
+          </div>
+          <div class="4u" id="sidebar"></div>
+          <script>addChallengeSidebar();</script>
+        </div>
+      </div>
+    </div>
+    <div id="footer-wrapper"></div>
+    <script>addFooter();</script>
+  </body>
+</html>

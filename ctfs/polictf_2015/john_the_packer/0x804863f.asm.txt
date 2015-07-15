@@ -1,0 +1,9 @@
+=>  0x804863f:  call  eax
+  0x8048641:  sub  esp,0x8
+  0x8048644:  push  DWORD  PTR  [ebp+0xc]
+  0x8048647:  push  DWORD  PTR  [ebp+0x8]
+  0x804864a:  call  0x804859b               ; decrypt 2
+  0x804864f:  add  esp,0x10
+  0x8048652:  nop
+  0x8048653:  leave  
+  0x8048654:  ret  

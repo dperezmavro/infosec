@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Hacky Easter 2015</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Hacky Easter 2015 is a free white-hat hacking competition" />
+    <meta name="keywords" content="Hacking Competition White-Hat Hacking-Lab Compass Free Fun CEH" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.dropotron.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/scripts.js"></script>
+    <script>var showBar=false;</script>
+    <script>
+      var query = getQueryParams(document.location.search);
+      var userToShow = query.name;
+
+      function onUserDataInjected() {
+        if (userToShow) {
+          $("#userName").html('Egg Basket of ' + userToShow);
+          addEggs(userToShow);
+        } else {
+          if (userName && userName != "") {
+            $("#userName").html('Your Egg Basket, ' + userName + '.');
+            addEggs(userName);
+          } else {
+            $("#userName").text('Not registered.');
+            $('#eggs').html('You\'re not registered yet. Do so by clicking <a href="register.html">here</a>');
+          }
+        }
+        $('#main-wrapper').show();
+      }
+    </script>
+  </head>
+
+  <body class="no-sidebar">
+    <div id="header-wrapper"></div>
+    <script>addHeader('eggs');</script>
+    <div id="main-wrapper">
+      <div class="container">
+        <section>
+          <div class="row">
+            <div class="8u">
+              <article class="box" id="egglist">
+                <header>
+                  <h3><span id="userName"></span></h3>
+                </header>
+                <p id="statistics" style="display:none;">
+                  <span class="statsTitle">Level:</span><span id="userLevel"></span><br/>
+                  <span class="statsTitle">Total Score:</span><span id="totalScore"></span><br/>
+                  <span class="statsTitle">Total Eggs:</span><span id="totalEggs"></span>  (<span id="easyEggs"></span> easy, <span id="mediumEggs"></span> med., <span id="hardEggs"></span> hard)<br/>
+                </p>
+                <p>
+                  <div id="eggs">loading...</div>
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="footer-wrapper"></div>
+    <script>addFooter();</script>
+  </body>
+</html>

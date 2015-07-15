@@ -1,0 +1,30 @@
+=>  0x80486de:  push  ebp
+  0x80486df:  mov  ebp,esp
+  0x80486e1:  sub  esp,0x18
+  0x80486e4:  sub  esp,0xc
+  0x80486e7:  push  DWORD  PTR  [ebp+0x18]
+  0x80486ea:  call  0x8048480  <strlen@plt>
+  0x80486ef:  add  esp,0x10
+  0x80486f2:  mov  DWORD  PTR  [ebp-0x10],eax
+  0x80486f5:  mov  DWORD  PTR  [ebp-0xc],0x0
+  0x80486fc:  jmp  0x804872b
+  0x80486fe:  mov  edx,DWORD  PTR  [ebp-0xc]
+  0x8048701:  mov  eax,DWORD  PTR  [ebp+0x18]
+  0x8048704:  add  eax,edx
+  0x8048706:  movzx  eax,BYTE  PTR  [eax]
+  0x8048709:  test  al,al
+  0x804870b:  jns  0x8048727
+  0x804870d:  sub  esp,0x8
+  0x8048710:  push  DWORD  PTR  [ebp+0x18]
+  0x8048713:  push  0x8048d26                   ; not ascii char error message
+  0x8048718:  call  0x8048440  <printf@plt>
+  0x804871d:  add  esp,0x10
+  0x8048720:  mov  eax,0x0
+  0x8048725:  jmp  0x8048738
+  0x8048727:  add  DWORD  PTR  [ebp-0xc],0x1
+  0x804872b:  mov  eax,DWORD  PTR  [ebp-0xc]
+  0x804872e:  cmp  eax,DWORD  PTR  [ebp-0x10]
+  0x8048731:  jl  0x80486fe
+  0x8048733:  mov  eax,0x1
+  0x8048738:  leave  
+  0x8048739:  ret

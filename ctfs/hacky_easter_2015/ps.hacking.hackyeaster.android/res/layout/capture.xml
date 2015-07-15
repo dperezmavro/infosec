@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:paddingRight="@dimen/standard_padding" android:paddingBottom="@dimen/standard_padding" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <SurfaceView android:id="@id/preview_view" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <ps.hacking.zxing.client.android.ViewfinderView android:id="@id/viewfinder_view" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <LinearLayout android:orientation="vertical" android:id="@id/result_view" android:background="@color/result_view" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" android:baselineAligned="false" />
+    <TextView android:textColor="@color/status_text" android:gravity="center" android:id="@id/status_view" android:background="@color/transparent" android:paddingLeft="@dimen/standard_padding" android:paddingTop="@dimen/standard_padding" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</FrameLayout>

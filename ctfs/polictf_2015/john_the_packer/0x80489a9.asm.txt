@@ -1,0 +1,57 @@
+(gdb)  x/57i  $pc
+=>  0x80489a9:  push  ebp
+  0x80489aa:  mov  ebp,esp
+  0x80489ac:  push  edi
+  0x80489ad:  push  esi
+  0x80489ae:  push  ebx
+  0x80489af:  sub  esp,0x6c
+  0x80489b2:  lea  eax,[ebp-0x78]
+  0x80489b5:  mov  ebx,0x8048d60
+  0x80489ba:  mov  edx,0x16
+  0x80489bf:  mov  edi,eax
+  0x80489c1:  mov  esi,ebx
+  0x80489c3:  mov  ecx,edx
+  0x80489c5:  rep  movs  DWORD  PTR  es:[edi],DWORD  PTR  ds:[esi]
+  0x80489c7:  mov  DWORD  PTR  [ebp-0x1c],0x0
+  0x80489ce:  jmp  0x8048a2f
+  0x80489d0:  mov  eax,DWORD  PTR  [ebp-0x1c]
+  0x80489d3:  mov  edx,DWORD  PTR  [ebp+eax*8-0x74]
+  0x80489d7:  mov  eax,DWORD  PTR  [ebp+eax*8-0x78]
+  0x80489db:  mov  ecx,DWORD  PTR  [ebp-0x1c]
+  0x80489de:  add  ecx,0xb
+  0x80489e1:  mov  ebx,ecx
+  0x80489e3:  mov  ecx,DWORD  PTR  [ebp+0x18]
+  0x80489e6:  add  ecx,ebx
+  0x80489e8:  movzx  ecx,BYTE  PTR  [ecx]
+  0x80489eb:  movsx  ecx,cl
+  0x80489ee:  sub  esp,0xc
+  0x80489f1:  push  edx
+  0x80489f2:  push  eax
+  0x80489f3:  push  ecx
+  0x80489f4:  push  0x34
+  0x80489f9:  push  0x8048813
+  0x80489fe:  call  0x80485e0                   ; moar decrypt
+  0x8048a03:  add  esp,0x20
+  0x8048a06:  test  eax,eax                     ; eax must be one here
+  0x8048a08:  jne  0x8048a11
+  0x8048a0a:  mov  eax,0x0
+  0x8048a0f:  jmp  0x8048a3a
+  0x8048a11:  mov  eax,DWORD  PTR  [ebp+0x18]
+  0x8048a14:  add  eax,0x11
+  0x8048a17:  movzx  eax,BYTE  PTR  [eax]
+  0x8048a1a:  movsx  eax,al
+  0x8048a1d:  and  eax,0x1
+  0x8048a20:  test  eax,eax
+  0x8048a22:  jne  0x8048a2b
+  0x8048a24:  mov  eax,0x0
+  0x8048a29:  jmp  0x8048a3a
+  0x8048a2b:  add  DWORD  PTR  [ebp-0x1c],0x1
+  0x8048a2f:  cmp  DWORD  PTR  [ebp-0x1c],0xa
+  0x8048a33:  jle  0x80489d0
+  0x8048a35:  mov  eax,0x1
+  0x8048a3a:  lea  esp,[ebp-0xc]
+  0x8048a3d:  pop  ebx
+  0x8048a3e:  pop  esi
+  0x8048a3f:  pop  edi
+  0x8048a40:  pop  ebp
+  0x8048a41:  ret

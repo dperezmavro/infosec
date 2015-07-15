@@ -1,0 +1,42 @@
+function 080484FB seems to just increment memory location dword_8049CA4 by 2
+
+code in location 08048390 is called to take the input and call validation functions, as well as show success/fail
+
+function 08048801 seems to return 1 or 0 based on password validity
+    I believe we want the codepath at 0x80488ba
+
+function 08048519 seems to be the transformation function
+    seems to do linear transformations, i.e. f(a)=x, f(b)=x+1
+    dependent on a per-letter basis
+    it's ROT13 for a-z
+        2 -> 0x18 24
+        1 -> 0x5e 94
+        0 -> 0x0  0
+
+          while $eax < 16
+          x/w $ebp+(4*$eax)-0x4c
+          set $eax=$eax+1
+          end
+          
+           0xffffce20:  -1
+           0xffffce24:  17
+           0xffffce28:  -11
+           0xffffce2c:  3
+           0xffffce30:  -8
+           0xffffce34:  5
+           0xffffce38:  14
+           0xffffce3c:  -3
+           0xffffce40:  1
+           0xffffce44:  6
+           0xffffce48:  -11
+           0xffffce4c:  6
+           0xffffce50:  -8
+           0xffffce54:  -10
+           0xffffce58:  0
+
+these are the differences between the letters that must check out in order to succeed
+
+abcdefghijklmnopqrstuvwxyz
+nopqrstuvwxyzabcdefghijklm
+
+flag is flag{onetwotheflagyo}

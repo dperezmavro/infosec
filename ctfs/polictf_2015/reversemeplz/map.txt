@@ -1,0 +1,38 @@
+a-o
+al             0x6e	110
+al             0x6f	111
+al             0x70	112
+al             0x71	113
+al             0x72	114
+al             0x73	115
+al             0x74	116
+al             0x75	117
+al             0x76	118
+al             0x77	119
+al             0x78	120
+al             0x79	121
+al             0x7a	122
+al             0x61	97
+al             0x62	98
+[Inferior 1 (process 7458) exited normally]
+gdb.commands:34: Error in sourced command file:
+The program has no registers now.
+quit
+p-z
+al             0x63	99
+al             0x64	100
+al             0x65	101
+al             0x66	102
+al             0x67	103
+al             0x68	104
+al             0x69	105
+al             0x6a	106
+al             0x6b	107
+al             0x6c	108
+al             0x6d	109
+
+0
+al             0x10	16
+al             0x10	16
+al             0x10	16
+al             0x10	16

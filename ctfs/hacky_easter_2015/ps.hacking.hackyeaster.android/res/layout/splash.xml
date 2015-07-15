@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/splashImage" android:layout_width="240.0dip" android:layout_height="240.0dip" android:src="@drawable/id_launcher" android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:contentDescription="@string/splash_text" />
+</RelativeLayout>

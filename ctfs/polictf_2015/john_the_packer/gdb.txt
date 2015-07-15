@@ -1,0 +1,112 @@
+Breakpoint 1 at 0x80485dc
+Starting program: /home/dio/VMs/shared_folder/projects/polictf/john_the_packer/topack 
+[Inferior 1 (process 19789) exited normally]
+Breakpoint 2 at 0x8048aa5
+Starting program: /home/dio/VMs/shared_folder/projects/polictf/john_the_packer/topack 
+
+Breakpoint 2, 0x08048aa5 in ?? ()
+=> 0x08048aa5:	54	push   esp
+=> 0x8048aa5:	push   esp
+   0x8048aa6:	mov    ebp,esp
+   0x8048aa8:	sub    esp,0x18
+   0x8048aab:	cmp    DWORD PTR [ebp+0x18],0x1     ;checks number of command line arguments
+   0x8048aaf:	jg     0x8048ad1
+   0x8048ab1:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048ab4:	mov    eax,DWORD PTR [eax]
+   0x8048ab6:	sub    esp,0x8
+   0x8048ab9:	push   eax
+   0x8048aba:	push   0x8048db8
+   0x8048abf:	call   0x8048440 <printf@plt>
+   0x8048ac4:	add    esp,0x10
+   0x8048ac7:	sub    esp,0xc
+   0x8048aca:	push   0x0
+   0x8048acc:	call   0x8048470 <exit@plt>
+   0x8048ad1:	mov    DWORD PTR [ebp-0xc],0x0
+   0x8048ad8:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048adb:	add    eax,0x4
+   0x8048ade:	mov    eax,DWORD PTR [eax]
+   0x8048ae0:	sub    esp,0x4
+   0x8048ae3:	push   eax
+   0x8048ae4:	push   0x11
+   0x8048ae9:	push   0x8048655
+   0x8048aee:	call   decrypt_function_1
+   0x8048af3:	add    esp,0x10
+   0x8048af6:	add    DWORD PTR [ebp-0xc],eax
+   0x8048af9:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048afc:	add    eax,0x4
+   0x8048aff:	mov    eax,DWORD PTR [eax]
+   0x8048b01:	sub    esp,0x4
+   0x8048b04:	push   eax
+   0x8048b05:	push   0x11
+   0x8048b0a:	push   0x804869a
+   0x8048b0f:	call   decrypt_function_1
+   0x8048b14:	add    esp,0x10
+   0x8048b17:	add    DWORD PTR [ebp-0xc],eax
+   0x8048b1a:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048b1d:	add    eax,0x4
+   0x8048b20:	mov    eax,DWORD PTR [eax]
+   0x8048b22:	sub    esp,0x4
+   0x8048b25:	push   eax
+   0x8048b26:	push   0x17
+   0x8048b2b:	push   0x80486de
+   0x8048b30:	call   decrypt_function_1
+   0x8048b35:	add    esp,0x10
+   0x8048b38:	add    DWORD PTR [ebp-0xc],eax
+   0x8048b3b:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048b3e:	add    eax,0x4
+   0x8048b41:	mov    eax,DWORD PTR [eax]
+   0x8048b43:	sub    esp,0x4
+   0x8048b46:	push   eax
+   0x8048b47:	push   0x18
+   0x8048b4c:	push   0x8048a42
+   0x8048b51:	call   decrypt_function_1
+   0x8048b56:	add    esp,0x10
+   0x8048b59:	add    DWORD PTR [ebp-0xc],eax
+   0x8048b5c:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048b5f:	add    eax,0x4
+   0x8048b62:	mov    eax,DWORD PTR [eax]
+   0x8048b64:	sub    esp,0x4
+   0x8048b67:	push   eax
+   0x8048b68:	push   0x26
+   0x8048b6d:	push   0x80489a9
+   0x8048b72:	call   decrypt_function_1
+   0x8048b77:	add    esp,0x10
+   0x8048b7a:	add    DWORD PTR [ebp-0xc],eax
+   0x8048b7d:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048b80:	add    eax,0x4
+   0x8048b83:	mov    eax,DWORD PTR [eax]
+   0x8048b85:	push   0x0
+   0x8048b87:	push   eax
+   0x8048b88:	push   0x27
+   0x8048b8d:	push   0x804890b
+   0x8048b92:	call   decrypt_function_1
+   0x8048b97:	add    esp,0x10
+   0x8048b9a:	add    DWORD PTR [ebp-0xc],eax
+   0x8048b9d:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048ba0:	add    eax,0x4
+   0x8048ba3:	mov    eax,DWORD PTR [eax]
+   0x8048ba5:	sub    esp,0x4
+   0x8048ba8:	push   eax
+   0x8048ba9:	push   0x9
+   0x8048bae:	push   0x80488e4
+   0x8048bb3:	call   decrypt_function_1
+   0x8048bb8:	add    esp,0x10
+   0x8048bbb:	add    DWORD PTR [ebp-0xc],eax
+   0x8048bbe:	cmp    DWORD PTR [ebp-0xc],0x7
+   0x8048bc2:	jne    0x8048bdf
+   0x8048bc4:	mov    eax,DWORD PTR [ebp+0x1c]
+   0x8048bc7:	add    eax,0x4
+   0x8048bca:	mov    eax,DWORD PTR [eax]
+   0x8048bcc:	sub    esp,0x8
+   0x8048bcf:	push   eax
+   0x8048bd0:	push   0x8048dd0
+   0x8048bd5:	call   0x8048440 <printf@plt>
+   0x8048bda:	add    esp,0x10
+   0x8048bdd:	jmp    0x8048bef
+   0x8048bdf:	sub    esp,0xc
+   0x8048be2:	push   0x8048df8
+   0x8048be7:	call   0x8048440 <printf@plt>
+   0x8048bec:	add    esp,0x10
+   0x8048bef:	nop
+   0x8048bf0:	leave  
+   0x8048bf1:	ret    
