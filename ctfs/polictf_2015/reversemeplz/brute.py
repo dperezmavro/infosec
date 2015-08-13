@@ -2,6 +2,7 @@
 
 import string 
 import codecs
+import operator 
 diffs = [ -1, 17, -11, 3, -8, 5, 14, -3, 1, 6, -11, 6, -8, -10]
 
 def compute_string(letter):
@@ -16,6 +17,7 @@ def compute_string(letter):
 for a in string.ascii_lowercase:
     res = compute_string(codecs.encode(a,'rot_13'))
     try :
-        print "Letter {:s} generates path {:s}, plaintext {:s}".format(a, res, codecs.encode(res,'rot_13'))
+        if reduce(operator.and_ , map(lambda x: x in string.ascii_lowercase,res)):
+            print "Letter {:s} generates path {:s}, plaintext {:s}".format(a, res, codecs.encode(res,'rot_13'))
     except:
         pass #going to hell for this
