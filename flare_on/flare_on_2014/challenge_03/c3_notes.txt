@@ -1,0 +1,33 @@
+Message
+
+Nice job, you're really knocking these out! Here's the next binary. The password to the zip archive is "malware" again.
+Keep up the good work, and good luck!
+-FLARE
+
+$ file such_evil 
+such_evil: PE32 executable (console) Intel 80386 (stripped to external PDB), for MS Windows
+
+$ stat such_evil.exe 
+  File: ‘such_evil.exe’
+  Size: 7168      	Blocks: 32         IO Block: 4096   regular file
+Device: 1ah/26d	Inode: 10094344    Links: 1
+Access: (0666/-rw-rw-rw-)  Uid: ( 1000/     dio)   Gid: ( 1000/     dio)
+Access: 2015-03-22 16:12:35.785223878 +0000
+Modify: 2014-06-25 00:56:21.891023000 +0100
+Change: 2015-03-22 16:12:35.757223878 +0000
+ Birth: -
+
+
+rename to such_evil.exe
+	* run, only a messagebox is displayed
+
+very few imports. most functions look very small except for sub_401000
+
+function sub_401000 has a call eax instruction + lots of moves to the stack, and then jumps to it (1)
+ eax has value 18fd47, it is code
+
+ final loop is at 0x0018fe47--0x0018fe6c
+
+such.5h311010101@flare-on.com
+
+

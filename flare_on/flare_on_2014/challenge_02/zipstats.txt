@@ -1,0 +1,8 @@
+Archive:  C2.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     8375  2014-07-07 19:22   home.html
+        0  2014-07-07 18:30   img/
+     9560  2014-07-07 18:30   img/flare-on.png
+---------                     -------
+    17935                     3 files

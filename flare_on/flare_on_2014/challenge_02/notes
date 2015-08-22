@@ -1,0 +1,10 @@
+similar technique : 
+https://foxitsecurity.files.wordpress.com/2014/11/cryptophp-whitepaper-foxsrt-v4.pdf
+
+find include in page (line 152 of the html), find php appended to the end of the image
+de-obfuscate round 1
+de-obfuscate round 2
+find if stmt : a11DOTthatDOTjava5crapATflareDASHonDOTcom
+               a11.that.java5crap@flare-on.com
+
+echo -n '\97\49\49\68\x4F\84\116\x68\97\x74\x44\x4F\x54\x6A\97\x76\x61\x35\x63\x72\97\x70\x41\84\x66\x6C\97\x72\x65\x44\65\x53\72\111\110\68\79\84\99\x6F\x6D' | sed -e 's/\\/\n/g' | awk '!/x/ {printf "%#x\n", $1};/x/{print $1}' | sed -e "s/^/\\\\/" -e "s/0x/x/g"| tr -d "\n"

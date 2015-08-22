@@ -1,0 +1,70 @@
+reference to hints : APT, chinese, mandiant, apt 9001 (chenese, over 9000 lol) 
+
+
+$ ./pdfid.py  APT9001.pdf 
+ PDFiD 0.2.1 APT9001.pdf
+ PDF Header: %PDF-1.5
+ obj                   10
+ endobj                 9
+ stream                 3
+ endstream              3
+ xref                   2
+ trailer                2
+ startxref              2
+ /Page                  3(2)
+ /Encrypt               0
+ /ObjStm                0
+ /JS                    1(1)
+ /JavaScript            1(1)
+ /AA                    0
+ /OpenAction            1(1)
+ /AcroForm              0
+ /JBIG2Decode           1(1)
+ /RichMedia             0
+ /Launch                0
+ /EmbeddedFile          0
+ /XFA                   0
+ /Colors > 2^24         0
+
+ this : http://qpdf.sourceforge.net/files/qpdf-manual.html
+ and this : vulscan.googlecode.com/files/%5BDidier%20Stevens%5D%20Malicious%20PDF%20Analysis.pdf
+ qpdf
+
+ to normalize use : 
+    qpdf --stream-data=uncompress  ../APT9001.pdf ../APT9001_decompressed.pdf
+ inspect again : 
+ to exctract JS use :
+    pdf-parser -s javascript APT9001_decompressed.pdf
+
+    obj 2 0
+     Type: /Action
+     Referencing: 5 0 R
+       <<
+           /JS 5 0 R
+           /S /JavaScript
+           /Type /Action
+       >>
+
+    pdf-parser -o 5 -d hidden.js APT9001.pdf
+    
+    or for compressed
+
+    pdf-parser.py -o 6 --filter -d hidden.js ../APT9001.pdf (different referenced streams 
+
+beautify the js
+
+http://www.contextis.com/resources/blog/malware-1-exploit-infection/
+http://www.securitysift.com/windows-exploit-development-part-4-locating-shellcode-jumps/
+http://www.securitysift.com/windows-exploit-development-part-5-locating-shellcode-egghunting/
+http://resources.infosecinstitute.com/pattern-based-approach-memory-shellcodes-detection/
+
+http://digital-forensics.sans.org/blog/2014/12/23/analyzing-shellcode-extracted-from-malicious-rtf-other-documents
+http://parsiya.net/blog/2014-10-07-my-adventure-with-fireeye-flare-challenge/#ch4
+
+PDF obfuscation :
+http://blog.didierstevens.com/2008/04/29/pdf-let-me-count-the-ways/
+https://spivey.oriel.ox.ac.uk/corner/Obfuscated_PDF
+http://recon.cx/2010/slides/recon_2010_sebastian_porst.pdf
+http://www.sans.org/reading-room/whitepapers/engineering/pdf-obfuscation-primer-34005
+
+cat long_str.txt | sed -e "s/%u/ /g" -e "s/\([a-f0-9]\{2\}\)\([a-f0-9]\{2\}\)/0x\2,0x\1,/g"
