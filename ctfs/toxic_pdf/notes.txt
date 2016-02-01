@@ -1,0 +1,97 @@
+see crackme.pdf file. it has a form that checks for a password. This can be likely done in JS, so should have some JS objects in the pdf somewere.
+
+
+PDFiD 0.2.1 crackme.pdf
+ PDF Header: %PDF-1.7
+ obj                   25
+ endobj                25
+ stream                23
+ endstream             23
+ xref                   0
+ trailer                0
+ startxref              1
+ /Page                  1
+ /Encrypt               0
+ /ObjStm                1
+ /JS                    0
+ /JavaScript            0
+ /AA                    0
+ /OpenAction            0
+ /AcroForm              1
+ /JBIG2Decode           0
+ /RichMedia             0
+ /Launch                0
+ /EmbeddedFile          0
+ /XFA                   0
+ /Colors > 2^24         0
+
+
+strange. normalize with qpdf --stream-data=uncompress crackme.pdf crackme_uncompressed.pdf 
+
+
+PDFiD 0.2.1 crackme_uncompressed.pdf
+ PDF Header: %PDF-1.7
+ obj                   25
+ endobj                25
+ stream                23
+ endstream             18
+ xref                   0
+ trailer                0
+ startxref              1
+ /Page                  1
+ /Encrypt               0
+ /ObjStm                1       <- and this
+ /JS                    2
+ /JavaScript            2
+ /AA                    2       <- and this (additional actions, PDF spec page 409)
+ /OpenAction            0
+ /AcroForm              1       <- investigate this
+ /JBIG2Decode           0
+ /RichMedia             0
+ /Launch                0
+ /EmbeddedFile          0
+ /XFA                   0
+ /Colors > 2^24         0
+
+
+Find javascript objects 31 and 40. 
+python /opt/pdftools/pdf-parser.py -o 31 -d 31.js crackme_uncompressed.pdf
+python /opt/pdftools/pdf-parser.py -o 40 -d 40.js crackme_uncompressed.pdf
+
+this is obfuscated. Use spider monkey to emulate parts of code.
+  SM howto : https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Introduction_to_the_JavaScript_shell
+  tilde in JS : http://www.joezimjs.com/javascript/great-mystery-of-the-tilde/
+
+obfuscated js
+
+pust stuff in rhino for examination, as some functions still visible and can be simplified
+
+cat 31.js | grep -o  "mmu7d(\".*)" > deobf.js
+
+this function came about:
+
+//decrypt_string_with_byte(unescape(code_part_1+code_part_2), 0xFD);
+function raven() {
+    if (this.getField("pass").value == this.getField("╥").value + "antistring") {
+        this.getField("door2").hidden = false; 
+        app.alert(
+            {
+                cMsg: "Congratulations! You have solved the puzzle", 
+                cTitle: "Access granted", 
+                nIcon: 3
+            }
+        );
+    } else {
+        app.alert(
+            {
+                cMsg: "Invalid password! Try again", 
+                cTitle: "Wrong password", 
+                nIcon: 0
+            }
+        );
+    }
+}
+raven();
+
+
+first part of pass might be anti-string
