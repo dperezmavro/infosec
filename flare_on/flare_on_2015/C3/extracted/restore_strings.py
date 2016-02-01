@@ -1,0 +1,7 @@
+print 'txeTnialPot'[::-1]
+print 'tQ'[::-1]
+print 'tropweiv'[::-1]
+print 'retniaPQ'[::-1]
+print 'pamxiPward'[::-1]
+print 'moc.no-eralf@OOOOY.sev0000L.eiflE'[::-1]
+print '!ereht eno dnif nac uoy !edisni kooL'[::-1]

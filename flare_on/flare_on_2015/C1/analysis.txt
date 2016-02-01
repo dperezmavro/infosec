@@ -1,0 +1,6 @@
+find strings
+see jump
+there's comparison and then fail/success
+location 0040104D is where the magic happens
+
+the covert string is at 402140 and the length is probably 17h

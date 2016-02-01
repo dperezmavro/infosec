@@ -1,0 +1,15 @@
+youPecks: PE32 executable (console) Intel 80386, for MS Windows, UPX compressed
+
+unpacked upx -d youPecks
+    automated unpacking with upx fails, will need to do manual
+
+find PUSHAD instruction at : 0x00C6B440
+find POPAD instruction at  : 0x00C6B613
+find jmp.youPecks.00c63A8A <- probably original entry point from which to dump from     
+
+dump executable and fix imports
+
+it expects an argument, which is probably a number.
+
+Gets current time, stored it in 0012FEE0
+0012FEE8 is localtime64_s result

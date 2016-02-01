@@ -1,0 +1,17 @@
+[user@server Resources]$
+There are tons of tools out there to aid you in your analysis. Here are some suggestions:
+
+    IDA Pro
+    Ollydbg
+    Windbg
+    CFF Explorer
+    Hex Workshop
+    ILSpy
+
+There are also many books out there that could help you. Here are some suggestions:
+
+    Practical Malware Analysis
+    IDA Pro Book
+    Practical Reverse Engineering
+    x86 Instruction Set Architecture
+

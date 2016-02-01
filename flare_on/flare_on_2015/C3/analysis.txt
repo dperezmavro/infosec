@@ -1,0 +1,18 @@
+another PE file.
+looks like a compiled python file into binary
+binwalk it, can see image, this is positive.
+
+it is a python file compiled with a pyinstaller
+found research in order to reverse it, run some of the scripts now in /opt/decomp
+
+found (between all the junk) a file called elfie (also viewable with pyinstallers viewsource), dumped to disk. decompiled to python file, found massive obfuscated file. 
+
+scroll to the end, dump string rather than exec.
+find second very obfuscated file. howeer, can restore strings and some of the functions make sense.
+
+spot boolean option. decode b64 strings to find images.
+keep reading, miss email for a while, then spot and win
+
+
+mention the awesome research I came across while reading up for this
+

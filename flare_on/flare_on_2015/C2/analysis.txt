@@ -1,0 +1,4 @@
+this is a PE file
+rename to exe
+
+string length might be 0x25, speculating by setting of exc to 25h and the use of the loop instruction
