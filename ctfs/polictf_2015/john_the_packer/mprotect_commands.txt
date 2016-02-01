@@ -1,8 +1,0 @@
-br *0x80485F9
-info registers eax
-
-br *0x8048630
-br *0x804863F
-
-
-br *0x80485dc
