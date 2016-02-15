@@ -1,0 +1,48 @@
+locate checking code at CheckCodeActivity.java:loadFromNetwork
+
+  for (;;)
+      {
+        localObject3 = localObject1;
+        int k = paramString.charAt(0);
+        localObject3 = localObject1;
+        int j = paramString.charAt(1);
+        localObject3 = localObject1;
+        int m = paramString.charAt(2);
+        localObject3 = localObject1;
+        int n = paramString.charAt(3);
+        int i = k + j;
+        k = j + k;
+        j = m + n;
+        m = n + m;
+        localObject3 = localObject1;
+        int i1 = k / 13;
+        localObject3 = localObject1;
+        int i2 = i / 11;
+        localObject3 = localObject1;
+        n = j / 17;
+        paramString = str;
+        if (i % 11 + k % 13 == 13)
+        {
+          paramString = str;
+          if (i1 + m % 23 == 15)
+          {
+            paramString = str;
+            if (n + m % 23 == 12)
+            {
+              paramString = str;
+              if (i2 + j % 17 == 21)
+              {
+                localObject3 = localObject1;
+                paramString = getString(2131099671);
+              }
+            }
+          }
+        }
+if ((char(0) + char(1))%11 + (char(0) + char(1))%13== 13){
+  if (((char(0) + char(1))/13) + (char(2)+char(3)) % 23 == 15){
+    if (((char(2)+char(3))/17) + (char(2) + char(3)) % 23 == 12){
+      if (((char(0)+char(1)) /11) + (char(2)+char(3)) % 17 == 21){
+        //success!
+      }
+    }
+  }
