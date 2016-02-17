@@ -1,10 +1,8 @@
 import java.util.ArrayList;
 
 public class Cracker{
-	
 	public ArrayList<Tuple> set01 = new ArrayList<Tuple>();
 	public ArrayList<Tuple> set23 = new ArrayList<Tuple>();
-
 
 	public static void main(String args[]){
 		Cracker a = new Cracker();	
@@ -18,7 +16,6 @@ public class Cracker{
 
 	public ArrayList<Tuple> firstClause(){
 		ArrayList<Tuple> set01_t = new ArrayList<Tuple>();
-
 		for (int i = 32 ; i < 127; i ++){
 			for(int j = 32 ; j < 127; j++){
 				if ((i + j)%11 + (i + j)%13== 13){
@@ -31,7 +28,6 @@ public class Cracker{
 
 	public ArrayList<Tuple> thirdClause(){
 		ArrayList<Tuple> set23_t = new ArrayList<Tuple>();
-
 		for (int i = 32 ; i < 127; i ++){
 			for(int j = 32 ; j < 127; j++){
 				if (((i+j)/17) + (i + j) % 23 == 12){
@@ -46,11 +42,11 @@ public class Cracker{
 		for(Tuple t1 : clause1){
 			for (Tuple t2: clause3){
 				if (
-				((t1.getA() + t1.getB())/13) + (t2.getA() + t2.getB()) % 23 == 15 &&
-				((t1.getA()+ t1.getB()) /11) + (t2.getA() + t2.getB()) % 17 == 21
+					((t1.getA() + t1.getB())/13) + (t2.getA() + t2.getB()) % 23 == 15 &&
+					((t1.getA()+ t1.getB()) /11) + (t2.getA() + t2.getB()) % 17 == 21 &&
+					realTest( getCode(t1,t2))
 				){
-					//System.out.println("Found : " + t1.toString() + ", " + t2.toString());
-					System.out.println(getCode(t1,t2)+ ": "+ realTest(getCode(t1,t2)));
+					System.out.println(getCode(t1,t2));
 				}
 			}
 		}
@@ -58,11 +54,9 @@ public class Cracker{
 
 	public String getCode(Tuple a , Tuple b){
 		return new String( new char[]{	
-				(char) a.getA(),
-				(char) a.getB(),
-				(char) b.getA(),
-				(char) b.getB()
-				})
+							(char) a.getA(), (char) a.getB(),
+							(char) b.getA(), (char) b.getB()
+						})
 		;
 	}
 
