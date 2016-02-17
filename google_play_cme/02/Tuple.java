@@ -6,17 +6,8 @@ public class Tuple{
 		item_1 = a;
 		item_2 = b;		
 	}		
-
-	public int getA(){
-		return item_1;
-	}
-
-	public int getB(){
-		return item_2;
-	}
-
+	public int getA(){return item_1;}
+	public int getB(){return item_2;}
 	@Override 
-	public String toString(){
-		return item_1 + ", " + item_2;
-	}	
+	public String toString(){return item_1 + ", " + item_2;	}	
 }
