@@ -19,22 +19,21 @@ public class Cracker{
 	public ArrayList<Tuple> firstClause(){
 		ArrayList<Tuple> set01_t = new ArrayList<Tuple>();
 
-		for (int i = 0 ; i < 256; i ++){
-			for(int j = 0 ; j < 256; j++){
+		for (int i = 32 ; i < 127; i ++){
+			for(int j = 32 ; j < 127; j++){
 				if ((i + j)%11 + (i + j)%13== 13){
 					set01_t.add(new Tuple(i,j));
 				}
 			}
 		}
-		//System.out.pritln(set01_t.size());
 		return set01_t;
 	}
 
 	public ArrayList<Tuple> thirdClause(){
 		ArrayList<Tuple> set23_t = new ArrayList<Tuple>();
 
-		for (int i = 0 ; i < 256; i ++){
-			for(int j = 0 ; j < 256; j++){
+		for (int i = 32 ; i < 127; i ++){
+			for(int j = 32 ; j < 127; j++){
 				if (((i+j)/17) + (i + j) % 23 == 12){
 					set23_t.add(new Tuple(i,j));
 				}
@@ -49,18 +48,12 @@ public class Cracker{
 				if (
 				((t1.getA() + t1.getB())/13) + (t2.getA() + t2.getB()) % 23 == 15 &&
 				((t1.getA()+ t1.getB()) /11) + (t2.getA() + t2.getB()) % 17 == 21
-				&& inAsciiRange(t1) && inAsciiRange(t2)
 				){
 					//System.out.println("Found : " + t1.toString() + ", " + t2.toString());
 					System.out.println(getCode(t1,t2)+ ": "+ realTest(getCode(t1,t2)));
 				}
 			}
 		}
-	}
-
-	public boolean inAsciiRange(Tuple a){
-		return a.getA() < 127 && a.getA() > 31 &&
-			   a.getB() < 127 && a.getB() > 31;
 	}
 
 	public String getCode(Tuple a , Tuple b){

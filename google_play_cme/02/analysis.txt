@@ -46,3 +46,5 @@ if ((char(0) + char(1))%11 + (char(0) + char(1))%13== 13){
       }
     }
   }
+
+analyse if statements and relate them to inputs. get results from the first statement, then the third statement, then cross-reference with the 2nd and 4th, then filter by ascii range, then win (wTan in this case)

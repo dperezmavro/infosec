@@ -1,0 +1,187 @@
+-[ DefendIO Crackmes - Jumbled ]
+
+--[ Introduction ]
+It has been some time since I've posted anything, so I thought I'd look at the Android crackmes posted by DefendIO (https://play.google.com/store/apps/developer?id=DEFENDIO)! The link to the crackmes has got a number of challenges, of different levels. There are a lot of starter challenges (level 1), a level 2 and a level 4 challenge! 
+
+This is the writeup of the level 2 challenge, called 'jumbled cme'!
+
+--[ The App ]
+The app is a pretty simple app, essentially a mobile crackme, like the traditional crackmes for desktop. It asks you to provide a password and it boo's you if it's incorrect. The screen below shows the main screen of the application!
+
+So let's see what lives in that APK. I've solved some of the level 1 challenges prior to this, so I've had some vague intuition on the layout of the application. Firstly, let's unpack the apk and decompile the classes.dex file, and the manifest. The contents of the AndroidManifest.xml are:
+
+[code language="xml"]
+
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.defendio.cme.jumbled" platformBuildVersionCode="22" platformBuildVersionName="5.1.1-1819727">
+    <application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:supportsRtl="true" android:theme="@style/AppTheme">
+        <activity android:label="@string/app_name" android:name="net.defendio.cme.jumbled.CmeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:label="@string/title_activity_check_code" android:name="net.defendio.cme.jumbled.CheckCodeActivity" android:parentActivityName="net.defendio.cme.jumbled.CmeActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="net.defendio.cme.jumbled.CmeActivity"/>
+        </activity>
+        <activity android:label="about" android:name="net.defendio.cmelib.CmeAboutActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+[/code]
+
+By inspecting the manifest we can see that there are three activities, just like previously, called CmeActivity, CheckCodeActivity and CmeAboutActivity, all belonging to the net.dendio.cme.jumbled package. We can also further deduce that there are no services or other exposed IPC, and that the aptly named CheckCodeActivity has the main CmeActivity as a parent. Interesting!
+
+[GO THROUGH DISASEMBLING STEPS HERE]
+
+--[ CmeActivity ]
+This activity contains an EditText element and a button, as shown below.
+
+[img with main screen]
+
+Interestingly, looking at the CmeActivity.java file, we can see no programmatic assigment of the click listener for the button that will result in CheckCodeActivity to be called! The answer comes from inspecting the CmeActivity's onCreate method:
+
+[code language="java"]
+protected void onCreate(Bundle paramBundle){
+	super.onCreate(paramBundle);
+	setContentView(2130968602);
+}
+[/code]					
+
+The setContentView call contains what looks like a long identifier. Usually in Android the onCreate call is where you instantiate your views and click listeners and generally the UI-related setup. Based on the method's name and the fact that in Adnroid identifiers for resources are integers, we should be able to find a link between this Java class and a layout resource! Looking inside the decompiled JAR, we find the following  R$layout.class:
+
+[code language="java"]
+package net.defendio.cme.jumbled;
+
+public final class R$layout{
+	// other identifiers here
+	public static final int activity_cme = 2130968602;
+	//yet more here
+}
+[/code]
+
+Looking for a file activity_cme.xml under res/layout is where our missing connection is! Under the definition of the Button element, we can find the click listener residing there!
+
+[code language="xml"]
+<Button 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:text="@string/button_send" 
+	android:onClick="sendMessage" />
+[/code]
+
+Clicking this button will call the sendMessage function and instantiate the CheckCodeActivity, with our input text!
+
+--[ CheckCodeActivity ]
+This class appears to be the one responsible for verifying that our code is correct! Since this is an Activity, let's take it from it's onCreate method:
+
+[code]
+public void onCreate(Bundle paramBundle){
+	super.onCreate(paramBundle);
+	paramBundle = getIntent().getStringExtra("net.defendio.cme.jumbled.MESSAGE");
+	TextView localTextView = new TextView(this);
+	localTextView.setTextSize(20.0F);
+	if (paramBundle.length() != 4) {
+		paramBundle = "the code must be 4 characters long, try again";
+	}
+	for (;;){
+		localTextView.setText(paramBundle);
+		setContentView(localTextView);
+		return;
+		try{
+			paramBundle = loadFromNetwork(paramBundle);
+		}catch (IOException paramBundle){
+			paramBundle = "error: couldn't access internets, try again later";
+		}
+	}
+}
+[/code]	
+
+The onCreate method is taking our input from the Bundle passed to it by CmeActivity and checking that its length is 4. After this it's calling a method called loadFromNetwork, with the Bundle as an argument. The loadFromNetwork method is a bit convoluted and ugly to read due to some simple obfuscation going on, containing infiniloops, non-descriptive variable names and manipulations of variables meant to confuse you!
+
+The main code responsible for checking that our code is correct is found inside an catch block, and it looks like this:
+
+[code language="java"]
+catch (Exception localException){
+	for (;;){
+		localObject3 = localObject1;
+		int k = paramString.charAt(0);
+		localObject3 = localObject1;
+		int j = paramString.charAt(1);
+		localObject3 = localObject1;
+		int m = paramString.charAt(2);
+		localObject3 = localObject1;
+		int n = paramString.charAt(3);
+		int i = k + j;
+		k = j + k;
+		j = m + n;
+		m = n + m;
+		localObject3 = localObject1;
+		int i1 = k / 13;
+		localObject3 = localObject1;
+		int i2 = i / 11;
+		localObject3 = localObject1;
+		n = j / 17;
+		paramString = str;
+		if (i % 11 + k % 13 == 13){
+			paramString = str;
+			if (i1 + m % 23 == 15){
+				paramString = str;
+				if (n + m % 23 == 12){
+					paramString = str;
+						if (i2 + j % 17 == 21){
+							localObject3 = localObject1;
+							paramString = getString(2131099671);
+						}
+				}
+			}
+		}
+		localObject3 = paramString;
+		if (localObject1 != null){
+			localObject1.notify();
+			localObject3 = paramString;
+		}
+	}
+}
+[/code]
+
+Let's solve this!
+
+--[ The Solution ]
+The above crackme presents a challenge for many reasons. On the one hand, there's a lot of variables being used in the checks that are a composite product of our pin. Secondly, the use of modular arithmetic (the % operator) means that there is more than one set of numbers satisfying a solution. In particular,
+
+[code]
+ 1%5 = 8%7 = 101%50 
+[/code]
+
+Finally, from a mathematical standpoint, if we treat each if statement like an equation then we have a system of 4 equations with 8 unknowns and in general you can't solve these. On the other hand, if we replace the variables in the nested if statements with their pin-originating components, we will have a system of four equations with four unknowns, something that is perfectly solvable. Here's what I did, presented in "almost Java":
+
+[code language="java"]
+if ((char(0) + char(1))%11 + (char(0) + char(1))%13== 13){
+	if (((char(0) + char(1))/13) + (char(2)+char(3)) % 23 == 15){
+		if (((char(2)+char(3))/17) + (char(2) + char(3)) % 23 == 12){
+			if (((char(0)+char(1)) /11) + (char(2)+char(3)) % 17 == 21){
+		        //success!
+			}
+		}
+	}
+}
+[/code]
+
+From this we can notice what the first if-statement is concerned only with the first two characters of the pin, the third if-statement is concerned with the third and fourth, and then the second and fourth if-statements could be used as a verification test to make sure that the solutions produced as a result of solving the first two will work. 
+
+Also, when I say solve you should understand "nested-for-loop-bruteforcing" :) Here's my cracking code (with some helper functions to construct strings and what not):
+
+[code language="Java"]
+
+[/code]
+
+
+
+
+--[ Conclusion ]
+
+Easy crackme, gonna go for number 4 or 1 with C 
