@@ -7,8 +7,9 @@ This is the writeup of the level 2 challenge, called 'jumbled cme'!
 <h3><strong>--[ The App ]</strong></h3>
 The app is a pretty simple app, essentially a mobile crackme, like the traditional crackmes for desktop. It asks you to provide a password and it boo's you if it's incorrect. The screen below shows the main screen of the application!
 
-So let's see what lives in that APK. I've solved some of the level 1 challenges prior to this, so I've had some vague intuition on the layout of the application. Firstly, let's unpack the apk and decompile the classes.dex file, and the manifest. The contents of the AndroidManifest.xml are:
+So let's see what lives in that APK! To decompile the apk we'll be using apktool to decompile the APK file and the AndroidManifest.xml file and unzip to decompress APK file, and then dex2jar in order to convert classes.dex to classes.jar. We shall be inspecting the JAR file with ByteCodeViewer!
 
+I've solved some of the level 1 challenges prior to this, so I've had some vague intuition on the layout of the application. Firstly, the manifest. The contents of the AndroidManifest.xml are:
 [code language="xml"]
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.defendio.cme.jumbled" platformBuildVersionCode="22" platformBuildVersionName="5.1.1-1819727">
@@ -31,8 +32,6 @@ So let's see what lives in that APK. I've solved some of the level 1 challenges 
 </manifest>
 </manifest>
 [/code]
-
-[ TALK ABOUT DISASSEMBLY METHODS ]
 
 <h3>--[ CmeActivity ]</h3>
 This activity contains an EditText element and a button, as shown below:
