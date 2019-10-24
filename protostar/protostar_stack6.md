@@ -275,7 +275,17 @@ From        To          Syms Read   Shared Object Library
 0xb7eada50  0xb7fa14cc  Yes (*)     /lib/libc.so.6
 ```
 
-No surprises there, libc is everpresent! Now to find out where it's being loaded, we will need to inspect the processe's process memory maps:
+No surprises there, libc is everpresent! Now we basically just have to find gadgets in libc, and for that I used a tool called ROPgadget[8]. After we download libc from the protostar machine, run `ROPgadget --binary ../bin/libc.so.6 > libc_gadgets.txt` to extract gadgets from libc. And now let the most arduous process known to man begin - finding gadgets for our shellcode!
+
+### Exploitation
+
+As a first step, I tried to find the exact instructions that I needed but I had no luck.
+
+This is the final exploit that I can up with:
+
+
+
+Now to find out where it's being loaded, we will need to inspect the processe's process memory maps:
 
 ```bash
 $ ps aux | grep -e '[s]tack6'
@@ -286,13 +296,7 @@ b7e97000-b7fd5000 r-xp 00000000 00:10 759        /lib/libc-2.11.2.so <-- this
 ....
 ```
 
-So it looks like libc is loaded at base address `0xb7e97000`. Now we basically just have to find gadgets in libc. For this we are going to use a tool called ROPgadget[8], after we download libc from the protostar machine. To extract all the gadgets, run `ROPgadget --binary ../bin/libc.so.6 > libc_gadgets.txt`. And now let the most arduous process known to man begin - finding gadgets for our shellcode!
-
-### Exploitation
-
-As a first step, I tried to find the exact instructions that I needed but I had no luck.
-
-This is the final exploit that I can up with:
+So it looks like libc is loaded at base address `0xb7e97000`. 
 
 ```python
 import struct
@@ -352,6 +356,7 @@ I have a new approach!
 * finding where things are loaded in ram can be an ass
 * a debugger will mess you up in weird ways
 * find bad bytes you have to worry about
+* wasting enormous time with poython 2 and 3, what a mess of an ecosystem
 
 
 [1] - https://stackoverflow.com/a/17775966/1366384
