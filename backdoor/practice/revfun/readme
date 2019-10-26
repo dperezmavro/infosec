@@ -1,0 +1,14 @@
+again I keep reading the goddamn assembly for too long before I try anything out. Regardless
+
+opening this up in IDA, we see an interestingly named function: catflag
+
+catflag is called in main, but to get to it you have to go through a crazy-ass loop and what I identified as a strlen check. 
+
+in main we also see a reference to a weird looking string:
+	.rodata:00000000004009A5 aDlr0wS1h7S1Yz4 db 'dlr0w_s1h7_s1_yz4rC',0
+
+This is what gets strlen'd, and the result is compared to our own input's strlen a few blocks further down
+
+I spent a while reading the assembly, only to realise that I should try to submit the string reversed:
+	echo Cr4zy_1s_7h1s_w0rld | nc hack.bckdr.in 16016
+this gives back a flag, whose sha256 we must submit
